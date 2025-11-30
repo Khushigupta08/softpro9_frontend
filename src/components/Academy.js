@@ -6,6 +6,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Helmet } from 'react-helmet-async';
 import axios from 'axios';
 import ScrollArrowButton from './ScrollArrowButton';
+import { buildApiUrl } from "../utils/apiConfig";
 
 export default function Academy() {
       const [trainings, setTrainings] = useState([]);
@@ -90,7 +91,7 @@ const toggleExpand = (id) => {
     try {
       if (postAction === "expert") {
         // For expert requests - separate endpoint
-        await axios.post('http://localhost:5000/api/expert-requests', {
+        await axios.post(buildApiUrl('/api/expert-requests'), {
         name: userFormData.name,
         email: userFormData.email,
         phone: userFormData.phone,
@@ -142,7 +143,7 @@ const toggleExpand = (id) => {
   };
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/trainings") // ✅ backend API
+    fetch(buildApiUrl("/api/trainings")) // ✅ backend API
       .then((res) => res.json())
       .then((data) => setTrainings(data))
       .catch((err) => console.error("Error fetching trainings:", err));
@@ -153,7 +154,7 @@ const toggleExpand = (id) => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/batches")
+    fetch(buildApiUrl("/api/batches"))
       .then((res) => {
         if (!res.ok) {
           throw new Error("Failed to fetch batches");

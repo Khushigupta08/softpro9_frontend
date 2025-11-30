@@ -2,6 +2,7 @@ import { Clock, Facebook, Instagram, Linkedin, Mail, MapPin, Phone, Youtube } fr
 import { Link } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import logo from "../assets/SoftPro9-Main-Logo-1.png";
+import { buildApiUrl, getApiConfig } from "../utils/apiConfig";
 
 // ✅ Footer Locations Widget with SAP/Non-SAP separation
 function FooterLocationsWidget({ showSAPLocations = false }) {
@@ -15,7 +16,7 @@ function FooterLocationsWidget({ showSAPLocations = false }) {
 
   const loadLocations = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/locations?isActive=true');
+      const response = await fetch(buildApiUrl('/api/locations?isActive=true'), getApiConfig());
       const data = await response.json();
       
       if (data.success) {
@@ -104,7 +105,7 @@ function FooterCoursesWidget() {
   const loadCourses = async () => {
     try {
       // Fetch courses from API - returns array directly
-      const response = await fetch('http://localhost:5000/api/courses');
+      const response = await fetch(buildApiUrl('/api/courses'), getApiConfig());
       const data = await response.json();
       
       // API returns array directly
@@ -166,7 +167,7 @@ function FooterBlogsWidget() {
   const loadBlogs = async () => {
     try {
       // Fetch latest 6 blogs - API returns array directly
-      const response = await fetch('http://localhost:5000/api/blogs');
+      const response = await fetch(buildApiUrl('/api/blogs'), getApiConfig());
       const data = await response.json();
       
       // API returns array directly, not wrapped in success object

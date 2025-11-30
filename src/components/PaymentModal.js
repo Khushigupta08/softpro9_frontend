@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import eventBus from '../utils/eventBus';
+import { buildApiUrl } from '../utils/apiConfig';
 
 export default function PaymentModal({ course, amount, onClose, onSuccess }) {
   const [loading, setLoading] = useState(false);
@@ -18,7 +19,7 @@ export default function PaymentModal({ course, amount, onClose, onSuccess }) {
     const fetchMe = async () => {
       if (!token) return;
       try {
-        const res = await axios.get('http://localhost:5000/student/auth/me', { headers: { Authorization: `Bearer ${token}` } });
+        const res = await axios.get(buildApiUrl('/student/auth/me'), { headers: { Authorization: `Bearer ${token}` } });
         setUsername(res.data?.username || res.data?.email || 'Student');
       } catch (e) {
         // ignore
@@ -33,7 +34,7 @@ export default function PaymentModal({ course, amount, onClose, onSuccess }) {
     if (paymentMethod === 'UPI' && (!upiId || !upiId.includes('@'))) return setError('Please enter a valid UPI ID (e.g., example@upi)');
     try {
       setLoading(true);
-      const res = await axios.post('http://localhost:5000/api/payments/create', { courseId: course.id, amount, upiId }, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.post(buildApiUrl('/api/payments/create'), { courseId: course.id, amount, upiId }, { headers: { Authorization: `Bearer ${token}` } });
       setPaymentId(res.data.paymentId);
       setStage('created');
       // save upi for convenience
@@ -52,7 +53,7 @@ export default function PaymentModal({ course, amount, onClose, onSuccess }) {
       setStage('confirming');
       // simulate providerPaymentId as upi_<paymentId> to match backend expectations
       const providerPaymentId = `upi_${paymentId}_${Date.now()}`;
-      const res = await axios.post('http://localhost:5000/api/payments/confirm', { paymentId, providerPaymentId, upiId }, { headers: { Authorization: `Bearer ${token}` } });
+      const res = await axios.post(buildApiUrl('/api/payments/confirm'), { paymentId, providerPaymentId, upiId }, { headers: { Authorization: `Bearer ${token}` } });
       setStage('success');
       // broadcast enrollment/payment update so other components refresh their state
       try { eventBus.emit('enrollment:changed', { courseId: course.id, payment: res.data.payment }); } catch (e) {}

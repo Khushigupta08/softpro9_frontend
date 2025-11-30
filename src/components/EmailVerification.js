@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ScrollArrowButton from './ScrollArrowButton';
+import { buildApiUrl } from '../utils/apiConfig';
 
 const EmailVerification = () => {
   const [status, setStatus] = useState('verifying');
@@ -18,7 +19,7 @@ const EmailVerification = () => {
       }
 
       try {
-        const response = await fetch(`http://localhost:5000/student/auth/verify?token=${token}`);
+        const response = await fetch(`${buildApiUrl('/student/auth/verify')}?token=${token}`);
         const data = await response.json();
 
         if (response.ok) {

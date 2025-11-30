@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Star, Award, Shield } from 'lucide-react';
+import { buildApiUrl } from '../utils/apiConfig';
 
 const ConsultationFormModal = ({ isOpen, onClose, formType = 'consultation' }) => {
   const [loading, setLoading] = useState(false);
@@ -137,7 +138,7 @@ const ConsultationFormModal = ({ isOpen, onClose, formType = 'consultation' }) =
 
       console.log('Submitting data:', submissionData);
 
-      const response = await fetch('http://localhost:5000/api/consultations', {
+      const response = await fetch(buildApiUrl('/api/consultations'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

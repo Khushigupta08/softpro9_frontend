@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { GraduationCap, TrendingUp, Users, Award, Briefcase, BookOpen, DollarSign, MapPin, CheckCircle, Phone, Mail, Globe, ArrowRight, Download, Calendar, Target, Zap, Heart } from 'lucide-react';
 import ScrollArrowButton from './ScrollArrowButton';
+import { buildApiUrl, getApiConfig } from '../utils/apiConfig';
 
 
 export default function Franchise() {
@@ -38,11 +39,9 @@ const handleSubmit = async (e) => {
   }
 
   try {
-    const response = await fetch('http://localhost:5000/api/franchise/submit', {
+    const response = await fetch(buildApiUrl('/api/franchise/submit'), {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      ...getApiConfig(),
       body: JSON.stringify(formData),
     });
 

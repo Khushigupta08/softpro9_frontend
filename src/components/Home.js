@@ -8,6 +8,7 @@ import 'react-quill-new/dist/quill.snow.css';
 import { Helmet } from 'react-helmet-async';
 import ConsultationFormModal from "./ConsultationFormModal";
 import ScrollArrowButton from './ScrollArrowButton';
+import { buildApiUrl, getApiConfig } from "../utils/apiConfig";
 
 
 function FeaturedLocationsWidget() {
@@ -21,7 +22,7 @@ function FeaturedLocationsWidget() {
 
   const loadLocations = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/locations?isActive=true');
+      const response = await fetch(buildApiUrl('/api/locations?isActive=true'), getApiConfig());
       const data = await response.json();
       if (data.success) {
         setLocations(data.data.slice(0, 8)); // Only 8 locations
@@ -121,7 +122,7 @@ export default function Home() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:5000/api/blogs")
+      .get(buildApiUrl("/api/blogs"))
       .then((res) => {
         // Sort by createdAt descending agar available ho, warna as is le lo
         const sorted = res.data.sort((a, b) => {
@@ -730,7 +731,7 @@ export default function Home() {
                     const imageSrc = card.imgUrl
                         ? card.imgUrl
                         : card.imgFile
-                        ? `http://localhost:5000/uploads/${card.imgFile}`
+                        ? `${buildApiUrl('/uploads')}/${card.imgFile}`
                         : "";
 
                     const rawHtml = card.content || card.excerpt || "";

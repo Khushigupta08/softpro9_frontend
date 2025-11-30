@@ -3,6 +3,7 @@ import axios from "axios";
 import { useAuth } from "../authContext";
 import { BookOpen, CreditCard, Calendar, FileText, Settings, LogOut, User, TrendingUp, Award, Clock } from "lucide-react";
 import ScrollArrowButton from './ScrollArrowButton';
+import { buildApiUrl } from "../utils/apiConfig";
 
 const Sidebar = ({ active, setActive }) => {
   const items = [
@@ -176,7 +177,7 @@ const Dashboard = () => {
       try {
         let profileData = null;
         try {
-          const me = await axios.get("http://localhost:5000/student/auth/me");
+          const me = await axios.get(buildApiUrl("/student/auth/me"));
           profileData = me.data;
           setProfile(profileData);
         } catch (err) {
@@ -184,8 +185,8 @@ const Dashboard = () => {
         }
 
         const [coursesRes, requestsRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/courses"),
-          axios.get("http://localhost:5000/api/access-requests"),
+          axios.get(buildApiUrl("/api/courses")),
+          axios.get(buildApiUrl("/api/access-requests")),
         ]);
 
         const allCourses = Array.isArray(coursesRes.data) ? coursesRes.data : [];
@@ -212,7 +213,7 @@ const Dashboard = () => {
         try {
           const token = localStorage.getItem('token');
           const headers = token ? { Authorization: `Bearer ${token}` } : {};
-          const savedRes = await axios.get("http://localhost:5000/student/saved-courses", { headers });
+          const savedRes = await axios.get(buildApiUrl("/student/saved-courses"), { headers });
           setSavedCourses(Array.isArray(savedRes.data) ? savedRes.data : []);
         } catch (err) {
           // ignore if not authenticated or endpoint fails

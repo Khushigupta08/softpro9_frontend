@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../authContext";
+import { buildApiUrl } from "../utils/apiConfig";
 
 const RegisterModal = ({ onClose, switchToLogin }) => {
   const [form, setForm] = useState({
@@ -12,6 +13,13 @@ const RegisterModal = ({ onClose, switchToLogin }) => {
   const [focusedField, setFocusedField] = useState("");
   const { register } = useAuth();
 
+  useEffect(() => {
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = "unset";
+    };
+  }, []);
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
@@ -20,7 +28,6 @@ const RegisterModal = ({ onClose, switchToLogin }) => {
     e.preventDefault();
     setError("");
     try {
-      // add reCAPTCHA token if configured
       const siteKey = process.env.REACT_APP_RECAPTCHA_SITE_KEY;
       let recaptchaToken = null;
       if (siteKey && window.grecaptcha) {
@@ -29,9 +36,7 @@ const RegisterModal = ({ onClose, switchToLogin }) => {
       }
       const result = await register({ ...form, recaptchaToken });
       if (result.emailStatus === 'failed') {
-        // Show warning but don't prevent registration completion
         setError(`Registration successful but verification email could not be sent: ${result.emailError || 'Unknown error'}. Please use the resend verification option after logging in.`);
-        // Give user time to read the message before closing
         setTimeout(() => {
           onClose();
           switchToLogin();
@@ -46,136 +51,193 @@ const RegisterModal = ({ onClose, switchToLogin }) => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/student/auth/google";
+    window.location.href = buildApiUrl("/student/auth/google");
   };
 
-  useEffect(() => {
-    // prevent background scrolling while modal is open
-    const prev = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
-    return () => { document.body.style.overflow = prev; };
-  }, []);
-
   return (
-      <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex justify-center items-center z-50 p-4">
-    <div className="bg-white rounded-2xl shadow-xl w-full max-w-4xl grid md:grid-cols-2 overflow-hidden animate-modalSlideUp">
-
-      {/* Left Image Section */}
-      <div className="hidden md:block relative">
-        <img
-          src="https://images.unsplash.com/photo-1494790108377-be9c29b29330"
-          className="w-full h-full object-cover"
-          alt="signup"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/10 to-black/40"></div>
-        <div className="absolute bottom-6 left-6 text-white">
-          <h3 className="text-2xl font-bold drop-shadow">Join Our Community</h3>
-          <p className="text-sm opacity-90">Create your account & start learning</p>
-        </div>
-      </div>
-
-      {/* Right Form Section */}
-      <div className="relative p-8 bg-white max-h-[90vh] overflow-y-auto">
-
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="absolute right-4 top-4 text-gray-400 hover:text-gray-600 transition-all hover:rotate-90"
-        >
-          ✕
-        </button>
-
-        {/* Header */}
-        <div className="text-center mb-6 mt-6">
-          <h2 className="text-3xl font-bold text-gray-800">Create Account</h2>
-          <p className="text-gray-500 text-sm">Join us and start your journey</p>
-        </div>
-
-        {/* Error */}
-        {error && (
-          <div className="mb-4 p-3 bg-red-50 border-l-4 border-red-500 rounded text-red-600 text-sm">
-            {error}
-          </div>
-        )}
-
-        {/* Form */}
-        <form className="space-y-4" onSubmit={handleSubmit}>
-
-          <input
-            name="username"
-            placeholder="Full Name"
-            value={form.username}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-
-          <input
-            name="email"
-            type="email"
-            placeholder="Email Address"
-            value={form.email}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-
-          <input
-            name="mobile"
-            placeholder="Mobile Number"
-            value={form.mobile}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-
-          <input
-            name="password"
-            type="password"
-            placeholder="Password"
-            value={form.password}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none"
-          />
-
+    <div 
+      className="inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-50 p-4 animate-modalFadeIn" 
+      style={{ overflowY: 'auto' }}
+    >
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md relative my-8 animate-modalSlideUp">
+          <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 rounded-t-2xl"></div>
           <button
-            type="submit"
-            className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:opacity-90 transition"
+            onClick={onClose}
+            className="absolute right-4 top-6 text-gray-400 hover:text-gray-600 transition-colors duration-200 hover:rotate-90 transform transition-transform z-10 bg-white rounded-full p-1 shadow-md"
+            aria-label="Close"
           >
-            Create Account
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
-        </form>
+          
+          <div className="p-8 pt-12">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl font-bold text-gray-800 mb-2">Create Account</h2>
+              <p className="text-gray-500 text-sm">Join our community today</p>
+            </div>
 
-        {/* OR Divider */}
-        <div className="my-6 flex items-center">
-          <div className="flex-grow border-t" />
-          <span className="px-3 text-gray-500 text-sm">OR</span>
-          <div className="flex-grow border-t" />
-        </div>
+            {error && (
+              <div className="mb-4 p-4 bg-red-50 border-l-4 border-red-500 rounded-r text-red-700 text-sm animate-modalShake">
+                <p>{error}</p>
+              </div>
+            )}
 
-        {/* Google Login */}
-        <button
-          onClick={handleGoogleLogin}
-          className="w-full flex items-center justify-center gap-3 border py-3 rounded-lg hover:bg-gray-50 transition"
-        >
-          <img src="https://www.vectorlogo.zone/logos/google/google-icon.svg" className="w-5" alt="google" />
-          Continue with Google
-        </button>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  name="username"
+                  placeholder="Full Name"
+                  value={form.username}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField("username")}
+                  onBlur={() => setFocusedField("")}
+                  required
+                  style={{ paddingLeft: "40px" }}
+                  className={`w-full px-5 py-3 border-2 rounded-lg transition-all duration-200 outline-none ${
+                    focusedField === "username" ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"
+                  }`}
+                />
+                <svg
+                  className={`w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${
+                    focusedField === "username" ? "text-blue-500" : "text-gray-400"
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
 
-        <div className="mt-6 text-center">
-          <p className="text-gray-600 text-sm">
-            Already have an account?{" "}
-            <button onClick={switchToLogin} className="text-blue-600 font-semibold">
-              Login here
+              <div className="relative">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email Address"
+                  value={form.email}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField("email")}
+                  onBlur={() => setFocusedField("")}
+                  required
+                  style={{ paddingLeft: "40px" }}
+                  className={`w-full px-5 py-3 border-2 rounded-lg transition-all duration-200 outline-none ${
+                    focusedField === "email" ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"
+                  }`}
+                />
+                <svg
+                  className={`w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${
+                    focusedField === "email" ? "text-blue-500" : "text-gray-400"
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+              </div>
+
+              <div className="relative">
+                <input
+                  type="tel"
+                  name="mobile"
+                  placeholder="Mobile Number"
+                  value={form.mobile}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField("mobile")}
+                  onBlur={() => setFocusedField("")}
+                  required
+                  style={{ paddingLeft: "40px" }}
+                  className={`w-full px-5 py-3 border-2 rounded-lg transition-all duration-200 outline-none ${
+                    focusedField === "mobile" ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"
+                  }`}
+                />
+                <svg
+                  className={`w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${
+                    focusedField === "mobile" ? "text-blue-500" : "text-gray-400"
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
+              </div>
+
+              <div className="relative">
+                <input
+                  type="password"
+                  name="password"
+                  placeholder="Password"
+                  value={form.password}
+                  onChange={handleChange}
+                  onFocus={() => setFocusedField("password")}
+                  onBlur={() => setFocusedField("")}
+                  required
+                  style={{ paddingLeft: "40px" }}
+                  className={`w-full px-5 py-3 border-2 rounded-lg transition-all duration-200 outline-none ${
+                    focusedField === "password" ? "border-blue-500 bg-blue-50" : "border-gray-200 hover:border-gray-300"
+                  }`}
+                />
+                <svg
+                  className={`w-5 h-5 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none transition-colors ${
+                    focusedField === "password" ? "text-blue-500" : "text-gray-400"
+                  }`}
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                </svg>
+              </div>
+              
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white py-3 rounded-lg font-semibold hover:from-blue-600 hover:to-purple-700 transform hover:scale-[1.02] transition-all duration-200 shadow-lg hover:shadow-xl mt-6"
+              >
+                Register
+              </button>
+            </form>
+
+            <div className="relative my-6 pt-4">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-300"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-white text-gray-500">OR CONTINUE WITH</span>
+              </div>
+            </div>
+
+            <button
+              onClick={handleGoogleLogin}
+              className="w-full flex items-center justify-center gap-3 bg-white border-2 border-gray-300 text-gray-700 py-3 rounded-lg font-semibold hover:bg-gray-50 hover:border-gray-400 transform hover:scale-[1.02] transition-all duration-200 shadow-sm hover:shadow-md"
+            >
+              <svg className="w-5 h-5" viewBox="0 0 24 24">
+                <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" />
+                <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" />
+              </svg>
+              Gmail
             </button>
-          </p>
-        </div>
 
+            <div className="mt-6 text-center">
+              <p className="text-gray-600 text-sm">
+                Already have an account?{" "}
+                <button
+                  onClick={switchToLogin}
+                  className="text-blue-600 hover:text-blue-700 font-semibold hover:underline transition-colors"
+                >
+                  Login here
+                </button>
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-
   );
 };
 

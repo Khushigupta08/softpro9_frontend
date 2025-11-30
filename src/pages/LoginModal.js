@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../authContext";
+import { buildApiUrl } from "../utils/apiConfig";
 
 const LoginModal = ({ onClose, switchToRegister }) => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -62,7 +63,7 @@ const LoginModal = ({ onClose, switchToRegister }) => {
   };
 
   const handleGoogleLogin = () => {
-    window.location.href = "http://localhost:5000/student/auth/google";
+    window.location.href = buildApiUrl("/student/auth/google");
   };
 
   const handleResendVerification = async () => {
@@ -72,7 +73,7 @@ const LoginModal = ({ onClose, switchToRegister }) => {
       return;
     }
     try {
-      const res = await fetch("http://localhost:5000/student/auth/resend-verification", {
+      const res = await fetch(buildApiUrl("/student/auth/resend-verification"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: form.email }),
@@ -307,3 +308,4 @@ const LoginModal = ({ onClose, switchToRegister }) => {
 };
 
 export default LoginModal;
+

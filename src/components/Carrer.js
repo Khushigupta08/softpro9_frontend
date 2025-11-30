@@ -5,6 +5,7 @@ import './style.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBalanceScale, faChartLine, faLightbulb, faUser} from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
+import { buildApiUrl } from '../utils/apiConfig';
 import 'react-quill-new/dist/quill.snow.css';
 import parse from 'html-react-parser';
 import { Helmet } from 'react-helmet-async';
@@ -95,7 +96,7 @@ export default function Carrer() {
 
   const fetchJobs = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/api/jobs");
+      const res = await axios.get(buildApiUrl("/api/jobs"));
       setJobs(res.data);
     } catch (err) {
       console.error("Failed to fetch jobs", err);
@@ -173,7 +174,7 @@ export default function Carrer() {
           formData.append(key, form[key]);
         }
       });
-      await axios.post("http://localhost:5000/api/applications", formData, {
+      await axios.post(buildApiUrl("/api/applications"), formData, {
         headers: { "Content-Type": "multipart/form-data" }
       });
       alert("Application submitted successfully!");

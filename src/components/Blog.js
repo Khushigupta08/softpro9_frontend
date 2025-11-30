@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import 'react-quill-new/dist/quill.snow.css';
 import { Helmet } from 'react-helmet-async';
 import ScrollArrowButton from './ScrollArrowButton';
+import { buildApiUrl } from '../utils/apiConfig';
 
 export default function Blog() {
   const [activeCategory, setActiveCategory] = useState("all");
@@ -12,8 +13,7 @@ export default function Blog() {
   const [subscribeMessage, setSubscribeMessage] = useState("");
 
   useEffect(() => {
-    // Replace with your actual API call
-    fetch("http://localhost:5000/api/blogs")
+    fetch(buildApiUrl("/api/blogs"))
       .then(res => res.json())
       .then(data => {
         console.log("Blogs from API:", data);

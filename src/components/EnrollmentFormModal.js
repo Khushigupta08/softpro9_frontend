@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import axios from 'axios';
 import { useDropzone } from 'react-dropzone';
 import { useAuth } from '../authContext';
+import { buildApiUrl } from '../utils/apiConfig';
 
 export default function EnrollmentFormModal({ onClose, onSubmitted }) {
   const { user } = useAuth();
@@ -62,7 +63,7 @@ export default function EnrollmentFormModal({ onClose, onSubmitted }) {
       });
       fd.append('idDocumentFile', file);
 
-      const res = await axios.post('http://localhost:5000/student/enrollment-form/submit', 
+      const res = await axios.post(buildApiUrl('/student/enrollment-form/submit'), 
         fd,
         {
           headers: {

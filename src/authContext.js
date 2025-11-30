@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import eventBus from "./utils/eventBus";
+import { buildApiUrl } from "./utils/apiConfig";
 
 const AuthContext = createContext();
 
@@ -16,7 +17,7 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       axios
-        .get("http://localhost:5000/student/auth/me")
+        .get(buildApiUrl("/student/auth/me"))
         .then((res) => {
           setUser(res.data || null);
         })
@@ -34,7 +35,7 @@ export const AuthProvider = ({ children }) => {
   const register = async (formData) => {
     try {
       console.log('Sending registration request:', formData);
-      const response = await axios.post("http://localhost:5000/student/auth/register", formData);
+      const response = await axios.post(buildApiUrl("/student/auth/register"), formData);
       
       // Emit registration success event
       eventBus.emit('registration-success', {
@@ -80,7 +81,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (formData) => {
     try {
-      const response = await axios.post("http://localhost:5000/student/auth/login", formData);
+      const response = await axios.post(buildApiUrl("/student/auth/login"), formData);
       setUser(response.data.user || null);
       localStorage.setItem("token", response.data.token);
       axios.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
@@ -104,7 +105,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", token);
     axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
     try {
-      const res = await axios.get("http://localhost:5000/student/auth/me");
+      const res = await axios.get(buildApiUrl("/student/auth/me"));
       const userData = res.data || null;
       setUser(userData);
       
