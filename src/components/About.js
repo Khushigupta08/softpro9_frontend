@@ -1,9 +1,43 @@
 import './style.css';
 import { Trophy, Flag, Award } from "lucide-react";
+import { Helmet } from 'react-helmet-async';
+import ScrollArrowButton from './ScrollArrowButton';
 
 export default function About() {
   return (
     <>
+              <ScrollArrowButton />
+
+    <Helmet>
+            <title>About Us - SoftPro9 Academy | Our Mission & Team</title>
+            <meta name="description" content="Learn about SoftPro9 Academy — our mission, vision, team, and commitment to building future-ready tech professionals through hands-on training." />
+            <meta name="keywords" content="about SoftPro9, SoftPro9 Academy, mission, vision, team, tech education" />
+            <link rel="canonical" href={window.location.origin + window.location.pathname} />
+
+            {/* Open Graph */}
+            <meta property="og:title" content="About SoftPro9 Academy" />
+            <meta property="og:description" content="Discover our mission to deliver practical, career-focused tech education and services across industries." />
+            <meta property="og:image" content={window.location.origin + '/images/about_softpro_image1.avif'} />
+            <meta property="og:url" content={window.location.origin + window.location.pathname} />
+            <meta property="og:type" content="website" />
+
+            {/* Twitter */}
+            <meta name="twitter:card" content="summary_large_image" />
+            <meta name="twitter:title" content="About SoftPro9 Academy" />
+            <meta name="twitter:description" content="Discover our mission to deliver practical, career-focused tech education and services across industries." />
+
+            {/* Organization JSON-LD (About page) */}
+            <script type="application/ld+json">
+              {`{
+                "@context": "https://schema.org",
+                "@type": "Organization",
+                "name": "SoftPro9 Academy",
+                "url": "${window.location.origin}",
+                "logo": "${window.location.origin}/logo192.png",
+                "sameAs": ["https://facebook.com/softpro9","https://linkedin.com/company/softpro9"]
+              }`}
+            </script>
+    </Helmet>
     <main>
         {/* main banner */}
         <section className="hero-bg text-white">
@@ -21,9 +55,9 @@ export default function About() {
         <section className="py-16 md:py-24 bg-white">
             <div className="container mx-auto px-6">
                 <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-                    <div className="w-full lg:w-5/12">
-                        <img src="/images/about_softpro_image1.avif" alt="A collaborative team planning on a whiteboard" class="rounded-xl shadow-2xl object-cover w-full h-full"/>
-                    </div>
+          <div className="w-full lg:w-5/12">
+            <img src={`${process.env.PUBLIC_URL || ''}/images/about_softpro_image1.avif`} alt="A collaborative team planning on a whiteboard" class="rounded-xl shadow-2xl object-cover w-full h-full"/>
+          </div>
                     <div className="w-full lg:w-7/12">
                         <span className="font-bold text-purple-600">WHO WE ARE</span>
                         <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mt-2 mb-6">Crafting Future-Proof Careers in Tech</h2>

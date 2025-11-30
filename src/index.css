@@ -9,4 +9,106 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Poppins', sans-serif; 
 }
 
-        
+/* Global paragraph and long-form text styles for improved readability */
+p, .text-content p, .content p {
+  line-height: 1.7;
+}
+
+/* Small helper for lead paragraphs */
+.lead {
+  line-height: 1.9;
+  font-size: 1.05rem;
+}
+/* Add this CSS to your Login.css or global CSS file */
+
+/* Add these animations to your global CSS or tailwind.config.js */
+
+/* Animations for Verification Popup */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Login Modal Animations */
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalSlideUp {
+  from {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes modalShake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  10%, 30%, 50%, 70%, 90% {
+    transform: translateX(-5px);
+  }
+  20%, 40%, 60%, 80% {
+    transform: translateX(5px);
+  }
+}
+
+/* Apply animations using Tailwind classes */
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.animate-slideUp {
+  animation: slideUp 0.4s ease-out;
+}
+
+.animate-scaleIn {
+  animation: scaleIn 0.5s ease-out 0.2s both;
+}
+
+.animate-modalFadeIn {
+  animation: modalFadeIn 0.3s ease-in-out;
+}
+
+.animate-modalSlideUp {
+  animation: modalSlideUp 0.4s ease-out;
+}
+
+.animate-modalShake {
+  animation: modalShake 0.5s ease-in-out;
+}

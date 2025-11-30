@@ -1,36 +1,18 @@
-// import React from 'react'
-import './style.css';
+import React from 'react'
 import { Link } from "react-router-dom";
-import { Helmet } from 'react-helmet-async';
-import ScrollArrowButton from './ScrollArrowButton';
-import ConsultationFormModal from "./ConsultationFormModal";
-import { useState, useEffect } from "react";
 
-export default function Digitalmarketing() {
-    const [mobileOpen, setMobileOpen] = useState(false);
-        const [showConsultationModal, setShowConsultationModal] = useState(false);
-        const [showModal, setShowModal] = useState(false);
-        const [modalFormType, setModalFormType] = useState('consultation'); // or 'quote'
-    const CheckIcon = () => (
+export default function dummy() {
+     const handleSubmit = (e) => {
+    e.preventDefault();
+    alert("Thank you for your interest! We will contact you soon.");
+  };
+  const CheckIcon = () => (
         <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
         </svg>
     );
-
-   
-  // Form submit handler
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    alert("Thank you for your interest! We will contact you soon.");
-  };
   return (
     <>
-              <ScrollArrowButton />
-
-    <Helmet>
-        <title>Digital Marketing - Softpro9</title>
-        <meta name="description" content="Grow online with us" />
-    </Helmet>
     {/* Hero Section  */}
     <section class="service_Marketing-hero service_Marketing-gradient text-white py-20 px-4">
         <div class="max-w-6xl mx-auto text-center">
@@ -41,30 +23,18 @@ export default function Digitalmarketing() {
                 <p class="text-xl md:text-2xl mb-8 text-blue-100 max-w-3xl mx-auto">
                     Leverage data-driven strategies, advanced tools, and AI automation to scale your business with precision and speed.
                 </p>
-                <button 
-                onClick={() => {
-                    setModalFormType('consultation');
-                    setShowModal(true);
-                    }}
-                class="service_Marketing-cta-btn bg-white hover:bg-blue-50 text-blue-900 font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                    Get a Free Consultation
+                <button class="service_Marketing-cta-btn bg-white hover:bg-blue-50 text-blue-900 font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    Get a Free Strategy Call
                 </button>
             </div>
         </div>
     </section>
-    {/* consultation modal */}
-            <ConsultationFormModal
-                isOpen={showModal}
-                onClose={() => setShowModal(false)}
-                formType={modalFormType}
-                />
-
 
      {/* Introduction Section  */}
     <section class="service_Marketing-intro py-16 px-4 bg-white">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-12">
-                <h2 class="text-4xl font-bold text-gray-800 mb-6">AI-Driven Digital Marketing Excellence</h2>
+                <h2 class="text-4xl font-bold text-gray-800 mb-6">AI-Driven Digital Marketing Excellence in banglore</h2>
                 <p class="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
                     SoftPro9 combines cutting-edge AI technology with proven marketing strategies to deliver exceptional results. 
                     Our advanced approach ensures smarter decisions, higher ROI, and sustainable growth.
@@ -568,7 +538,15 @@ export default function Digitalmarketing() {
                     </div>
                 </div>
 
-                
+                {/* Bottom CTA */}
+                <div className="text-center mt-16">
+                    <p className="text-gray-600 mb-6">
+                        Need a custom solution? Let's discuss your specific requirements.
+                    </p>
+                    <button className="bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg">
+                        Schedule a Free Consultation
+                    </button>
+                </div>
             </div>
     </section>
 
@@ -581,16 +559,13 @@ export default function Digitalmarketing() {
             </p>
             
             <div class="service_Marketing-cta-buttons flex flex-col sm:flex-row gap-4 justify-center">
-                <button 
-                onClick={() => {
-                    setModalFormType('quote');
-                    setShowModal(true);
-                    }}
-                class="service_Marketing-cta-primary bg-white hover:bg-blue-50 text-blue-900 font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
-                    Request a quote
+                <button class="service_Marketing-cta-primary bg-white hover:bg-blue-50 text-blue-900 font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                    Request a Free Marketing Audit
                 </button>
                 
-                
+                <button class="service_Marketing-cta-secondary border-2 border-white hover:bg-white hover:text-blue-900 text-blue-100 font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105">
+                    Talk to an Expert
+                </button>
             </div>
         </div>
     </section>
@@ -629,7 +604,105 @@ export default function Digitalmarketing() {
         </div>
     </section>
 
-    
+    {/* <!-- Contact Section --> */}
+    <section class="service_Marketing-contact py-20 px-4 bg-gradient-to-br from-gray-50 to-blue-50">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-gray-800 mb-4">Get Started Today</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                    Ready to transform your digital presence? Contact our experts for a personalized consultation
+                </p>
+            </div>
+
+            <div class="grid lg:grid-cols-2 gap-12">
+                 {/* Contact Form  */}
+                <div class="service_Marketing-contact-form bg-white rounded-xl p-8 shadow-lg">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Send us a Message</h3>
+                    <form class="space-y-6" onSubmit={handleSubmit}>
+                        <div class="service_Marketing-form-group">
+                            <input type="text" placeholder="Your Full Name" class="service_Marketing-input w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"/>
+                        </div>
+                        <div class="service_Marketing-form-group">
+                            <input type="email" placeholder="Your Email Address" class="service_Marketing-input w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"/>
+                        </div>
+                        <div class="service_Marketing-form-group">
+                            <input type="tel" placeholder="Your Phone Number" class="service_Marketing-input w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"/>
+                        </div>
+                        <div class="service_Marketing-form-group">
+                            <select class="service_Marketing-select w-full p-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent">
+                                <option>Service Interested In</option>
+                                <option>SEO Services</option>
+                                <option>Social Media Marketing</option>
+                                <option>PPC Advertising</option>
+                                <option>Content Marketing</option>
+                                <option>Email Marketing</option>
+                                <option>AI Marketing Solutions</option>
+                                <option>Complete Digital Marketing</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="service_Marketing-submit-btn bg-primary-blue hover:bg-dark-blue text-white font-bold py-4 px-8 rounded-lg w-full transition-all duration-300">
+                            Send Message
+                        </button>
+                    </form>
+                </div>
+
+                  {/* Contact Information  */}
+                <div class="service_Marketing-contact-info">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-8">Contact Information</h3>
+                    
+                    <div class="service_Marketing-contact-details space-y-6">
+                        <div class="service_Marketing-contact-item flex items-center">
+                            <div class="service_Marketing-contact-icon bg-primary-blue text-white w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-xl">📧</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Email</h4>
+                                <p class="text-gray-600">marketing@softpro9.com</p>
+                            </div>
+                        </div>
+
+                        <div class="service_Marketing-contact-item flex items-center">
+                            <div class="service_Marketing-contact-icon bg-primary-blue text-white w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-xl">💬</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">WhatsApp</h4>
+                                <p class="text-gray-600">+91 9876543210</p>
+                            </div>
+                        </div>
+
+                        <div class="service_Marketing-contact-item flex items-center">
+                            <div class="service_Marketing-contact-icon bg-primary-blue text-white w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                <span class="text-xl">📍</span>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-800">Office Address</h4>
+                                <p class="text-gray-600">Jaipur, Rajasthan, India</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="service_Marketing-social-links mt-8">
+                        <h4 class="font-semibold text-gray-800 mb-4">Follow Us</h4>
+                        <div class="flex space-x-4">
+                            <Link to="#" class="service_Marketing-social-link bg-blue-600 hover:bg-blue-700 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300">
+                                <span class="text-sm">f</span>
+                            </Link>
+                            <Link to="#" class="service_Marketing-social-link bg-blue-500 hover:bg-blue-600 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300">
+                                <span class="text-sm">t</span>
+                            </Link>
+                            <Link to="#" class="service_Marketing-social-link bg-blue-700 hover:bg-blue-800 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300">
+                                <span class="text-sm">in</span>
+                            </Link>
+                            <Link to="#" class="service_Marketing-social-link bg-pink-500 hover:bg-pink-600 text-white w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300">
+                                <span class="text-sm">ig</span>
+                            </Link>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
     </>
   )
 }

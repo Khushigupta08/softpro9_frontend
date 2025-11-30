@@ -9,151 +9,206 @@
             box-shadow: 0 25px 50px rgba(59, 130, 246, 0.15);
         }
         /* Navigation css start */
-        .navbar-scrolled {
-            backdrop-filter: blur(15px);
-            background-color: rgba(255, 255, 255, 0.95);
-            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-        }
+        /* Navbar CSS - Complete Updated Version */
 
-            .dropdown {
-                    opacity: 0;
-                    visibility: hidden;
-                    transform: translateY(-10px);
-                    transition: all 0.3s ease-in-out;
-            }
+.navbar-scrolled {
+    backdrop-filter: blur(15px);
+    background-color: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+}
 
-            .dropdown.show,
-            .dropdown-parent:hover .dropdown {
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0);
-            }
+.dropdown {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: all 0.3s ease-in-out;
+}
 
+.dropdown.show,
+.dropdown-parent:hover .dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
 
-        .dropdown-item {
-            position: relative !important;
-            overflow: hidden !important;
-        }
+.dropdown-item {
+    position: relative !important;
+    overflow: hidden !important;
+}
 
-        .dropdown-item::before {
-            content: '' !important;
-            position: absolute !important;
-            left: 0 !important;
-            top: 0 !important;
-            width: 4px !important;
-            height: 100% !important;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
-            transform: scaleY(0) !important;
-            transition: transform 0.3s ease !important;
-        }
+.dropdown-item::before {
+    content: '' !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    width: 4px !important;
+    height: 100% !important;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed) !important;
+    transform: scaleY(0) !important;
+    transition: transform 0.3s ease !important;
+}
 
-        .dropdown-item:hover::before {
-            transform: scaleY(1) !important;
-        }
+.dropdown-item:hover::before {
+    transform: scaleY(1) !important;
+}
 
-        .nav-link {
-            position: relative;
-            overflow: hidden;
-        }
+.nav-link {
+    position: relative;
+    overflow: hidden;
+    /* Remove all focus styles */
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
 
-        .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: linear-gradient(135deg, #4f46e5, #7c3aed);
-            transition: width 0.3s ease;
-        }
+/* Remove focus state */
+.nav-link:focus,
+.nav-link:focus-visible,
+.nav-link:active {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+}
 
-        .nav-link:hover::after {
-            width: 100%;
-        }
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    transition: width 0.3s ease;
+}
 
-        .navbar-shadow {
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-        }
+.nav-link:hover::after {
+    width: 100%;
+}
 
-        /* Mobile menu scrolling */
-        #mobile-menu {
-            max-height: calc(100vh - 64px);
-        }
-        
-        /* Prevent body scroll when mobile menu is open */
-        body.mobile-menu-open {
-            overflow: hidden;
-        }
+/* Remove focus from buttons in navbar */
+nav button {
+    outline: none !important;
+    border: none !important;
+}
 
-        /* Mobile menu animation */
-        .mobile-menu-enter {
-            animation: slideDown 0.3s ease-in-out;
-        }
+nav button:focus,
+nav button:focus-visible,
+nav button:active {
+    outline: none !important;
+    box-shadow: none !important;
+}
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+/* Remove focus from all links in navbar */
+nav a {
+    outline: none !important;
+}
 
-        /* Chevron rotation */
-        .rotate-180 {
-            transform: rotate(180deg);
-        }
-        /* Navigation css end */
+nav a:focus,
+nav a:focus-visible,
+nav a:active {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
 
-        .floating-animation {
-            animation: floating 3s ease-in-out infinite;
-        }
-        @keyframes floating {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        .slide-in {
-            animation: slideIn 0.8s ease-out;
-        }
-        @keyframes slideIn {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .testimonial-slider {
-            overflow: hidden;
-        }
-        .testimonial-track {
-            display: flex;
-            animation: slide 20s infinite;
-        }
-        @keyframes slide {
-            0%, 20% { transform: translateX(0); }
-            25%, 45% { transform: translateX(-100%); }
-            50%, 70% { transform: translateX(-200%); }
-            75%, 95% { transform: translateX(-300%); }
-            100% { transform: translateX(0); }
-        }
-        .company-slider {
-            animation: scroll 25s linear infinite;
-        }
-        @keyframes scroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
-        }
-        .pulse-blue {
-            animation: pulseBlue 2s infinite;
-        }
-        @keyframes pulseBlue {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
-            50% { box-shadow: 0 0 0 20px rgba(59, 130, 246, 0); }
-        }
-        .glass-effect {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
+/* Dropdown parent button focus */
+.dropdown-parent button {
+    outline: none !important;
+    border: none !important;
+}
+
+.dropdown-parent button:focus,
+.dropdown-parent button:focus-visible,
+.dropdown-parent button:active {
+    outline: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.navbar-shadow {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Mobile menu scrolling */
+#mobile-menu {
+    max-height: calc(100vh - 64px);
+}
+
+/* Prevent body scroll when mobile menu is open */
+body.mobile-menu-open {
+    overflow: hidden;
+}
+
+/* Mobile menu animation */
+.mobile-menu-enter {
+    animation: slideDown 0.3s ease-in-out;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Chevron rotation */
+.rotate-180 {
+    transform: rotate(180deg);
+}
+/* Navigation css end */
+
+.floating-animation {
+    animation: floating 3s ease-in-out infinite;
+}
+@keyframes floating {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+}
+.slide-in {
+    animation: slideIn 0.8s ease-out;
+}
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+.testimonial-slider {
+    overflow: hidden;
+}
+.testimonial-track {
+    display: flex;
+    animation: slide 20s infinite;
+}
+@keyframes slide {
+    0%, 20% { transform: translateX(0); }
+    25%, 45% { transform: translateX(-100%); }
+    50%, 70% { transform: translateX(-200%); }
+    75%, 95% { transform: translateX(-300%); }
+    100% { transform: translateX(0); }
+}
+.company-slider {
+    animation: scroll 25s linear infinite;
+}
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-100%); }
+}
+.pulse-blue {
+    animation: pulseBlue 2s infinite;
+}
+@keyframes pulseBlue {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.7); }
+    50% { box-shadow: 0 0 0 20px rgba(59, 130, 246, 0); }
+}
+.glass-effect {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
 
         /* Style for the hero background image with a dark overlay */
         .hero-bg {
@@ -1034,7 +1089,7 @@
             color: white;
             text-decoration: none;
             font-weight: 600;
-            transition: all 0.3s ease;
+            /* transition: all 0.3s ease; */
             position: relative;
             z-index: 2;
             display: inline-block;
@@ -1043,7 +1098,7 @@
         .apply-btn:hover {
             background: white;
             color: #667eea;
-            animation: pulse 1s infinite;
+            /* animation: pulse 1s ; */
         }
         
         /* Benefits Section */
@@ -1378,14 +1433,14 @@
             background: linear-gradient(45deg, #1e40af, #2563eb);
         }
 
-        .industries-icon-pulse {
+        /* .industries-icon-pulse {
             animation: pulse 2s infinite;
         }
 
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.7; }
-        }
+        } */
 
         .industries-floating {
             animation: float 3s ease-in-out infinite;
@@ -1434,7 +1489,7 @@
         .serviceweb-process-step {
             position: relative;
         }
-        .serviceweb-process-step::after {
+        /* .serviceweb-process-step::after {
             content: '';
             position: absolute;
             top: 50%;
@@ -1443,7 +1498,7 @@
             height: 2px;
             background: #3b82f6;
             transform: translateY(-50%);
-        }
+        } */
         .serviceweb-process-step:last-child::after {
             display: none;
         }
@@ -1852,9 +1907,10 @@
             transform: translateY(-2px);
             box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3);
             background-color: #fff !important; 
+            color:#3b82f6 !important;
         }
         .academy-highlight {
-            color: #fff;
+            color: blue;
             font-weight: 600;
         }
         .academy-stats {
@@ -1934,7 +1990,7 @@
             position: relative;
         }
         
-        .recruitment-process-step::after {
+        /* .recruitment-process-step::after {
             content: '';
             position: absolute;
             top: 50%;
@@ -1943,7 +1999,7 @@
             height: 2px;
             background: #3b82f6;
             transform: translateY(-50%);
-        }
+        } */
         
         .recruitment-process-step:last-child::after {
             display: none;
@@ -1969,3 +2025,172 @@
                 display: none;
             }
         }
+
+/* Academy slider responsive behavior: on small screens show one card per viewport with scroll-snap */
+@media (max-width: 640px) {
+    .academy-slider {
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 8px; /* space for shadow */
+    }
+
+    .academy-track {
+        transition: none !important; /* let native scroll work smoothly on mobile */
+        gap: 16px;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    /* each card should fill the viewport width on mobile */
+    .academy-track > .flex-shrink-0 {
+        flex: 0 0 100% !important;
+        width: 100% !important;
+        scroll-snap-align: start;
+    }
+
+    /* make inner card stretch full height for consistent UI */
+    .academy-track > .flex-shrink-0 .flex {
+        height: 100%;
+    }
+
+    /* hide desktop nav buttons inside slider area on small screens */
+    .academy-slider ~ .academy-nav-btn,
+    .academy-nav-btn {
+        display: none !important;
+    }
+
+    /* Mobile arrows (visible and tappable) */
+    .academy-mobile-arrow {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        opacity: 0.95;
+        backdrop-filter: blur(6px);
+    }
+
+    /* hide dots to avoid clutter (optional) */
+    .academy-track + .dots, .academy-dots {
+        display: none;
+    }
+
+    /* Simplify card hover effects on touch devices */
+    .academy-course-card:hover, .academy-card:hover {
+        transform: none;
+        box-shadow: none;
+        border-color: transparent;
+    }
+}
+
+
+        /* service page css */
+
+        .servicespage-gradient-bg {
+            background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
+        }
+        
+        .servicespage-card-hover {
+            transition: all 0.3s ease;
+        }
+        
+        .servicespage-card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.15);
+        }
+        
+        .servicespage-hover-scale:hover {
+            transform: scale(1.05);
+        }
+        
+        .servicespage-text-gradient {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .servicespage-feature-box {
+            background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+            border: 1px solid #e2e8f0;
+        }
+        
+        
+        
+        .servicespage-testimonial-bg {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+        
+        .servicespage-process-line::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -30px;
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, #3b82f6, transparent);
+        }
+        
+        .servicespage-process-line:last-child::after {
+            display: none;
+        }
+
+    .overview-text a {
+    color: blue;
+    text-decoration: underline;
+}
+
+    /* Core services description: justify and support show more/less */
+    .core-desc {
+        text-align: justify;
+    }
+    .core-desc.collapsed {
+        display: -webkit-box;
+        -webkit-line-clamp: 3; /* show 3 lines when collapsed */
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+    .core-desc.expanded {
+        display: block;
+        -webkit-line-clamp: unset;
+        line-clamp: unset;
+    }
+
+
+/* registration and login modal */
+@keyframes modalFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes modalSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes modalShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.animate-modalFadeIn {
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+.animate-modalSlideUp {
+  animation: modalSlideUp 0.3s ease-out;
+}
+
+.animate-modalShake {
+  animation: modalShake 0.3s ease-out;
+}

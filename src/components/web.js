@@ -1,27 +1,24 @@
 import React from 'react'
-import { useEffect } from "react";
 import './style.css';
+import { Link } from "react-router-dom";
+import { Helmet } from 'react-helmet-async';
+import ScrollArrowButton from './ScrollArrowButton';
+import ConsultationFormModal from "./ConsultationFormModal";
+import { useState, useEffect } from "react";
+
 
 export default function Web() {
-    //smooth scroll for CTA buttons
-  useEffect(() => {
-    const handleClick = () => {
-      document.querySelector(".serviceweb-contact-form")?.scrollIntoView({
-        behavior: "smooth",
-      });
-    };
-
-    const buttons = document.querySelectorAll(
-      ".serviceweb-cta-btn, .serviceweb-cta-secondary, .serviceweb-cta-primary"
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [showConsultationModal, setShowConsultationModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [modalFormType, setModalFormType] = useState('consultation'); // or 'quote'
+    const CheckIcon = () => (
+        <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
+        </svg>
     );
-    buttons.forEach((btn) => btn.addEventListener("click", handleClick));
 
-    // cleanup
-    return () => {
-      buttons.forEach((btn) => btn.removeEventListener("click", handleClick));
-    };
-  }, []);
-
+    
   // Toggle FAQ
   const toggleFAQ = (e) => {
     const element = e.currentTarget;
@@ -39,22 +36,39 @@ export default function Web() {
 
   return (
     <>
+              <ScrollArrowButton />
+
+    <Helmet>
+                <title>Web Services - Softpro9</title>
+                <meta name="description" content="Our web development services" />
+        </Helmet>
       {/* Hero Section  */}
     <section className="serviceweb-gradient-bg text-white py-20">
         <div className="container mx-auto px-6">
             <div className="max-w-4xl mx-auto text-center">
                 <h1 className="text-5xl md:text-6xl font-bold mb-6 leading-tight">
-                    Building Next-Gen <span className="text-blue-200">Web & Mobile</span> Solutions
+                    Building Next-Gen <span className="mt-2">Web & Mobile</span> Solutions
                 </h1>
                 <p className="text-xl md:text-2xl mb-8 text-blue-100">
                     Scalable, secure, and user-friendly applications tailored to your business needs.
                 </p>
-                <button className="serviceweb-cta-btn bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-50 transition duration-300 shadow-lg">
-                    <i className="fas fa-phone-alt mr-2"></i>Get a Free Consultation
+                <button 
+                onClick={() => {
+                    setModalFormType('consultation');
+                    setShowModal(true);
+                    }}
+                className="serviceweb-cta-btn bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-50 transition duration-300 shadow-lg">
+                   Get a Free Consultation
                 </button>
             </div>
         </div>
     </section>
+    {/* consultation modal */}
+            <ConsultationFormModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                formType={modalFormType}
+                />
 
       {/* Introduction Section  */}
     <section className="py-16 bg-white">
@@ -354,6 +368,244 @@ export default function Web() {
         </div>
     </section>
 
+    {/* Pricing Section */}
+    <section className="py-20 bg-gradient-to-br from-blue-50 to-indigo-100">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Section Header */}
+                <div className="text-center mb-16">
+                    <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                        Web & App Development Packages
+                    </h2>
+                    <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                        From simple websites to complex web applications and mobile apps. Choose the perfect development solution for your business needs.
+                    </p>
+                </div>
+
+                {/* Pricing Cards Container */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-center">
+                    
+                    {/* Basic Website Package */}
+                    <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200 hover:shadow-xl hover:scale-105 hover:border-gray-300 transition-all duration-300 cursor-pointer group">
+                        <div className="text-center mb-6">
+                            <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <span className="text-2xl">🌐</span>
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">Basic Website</h3>
+                            <p className="text-gray-600 leading-relaxed">Perfect for startups and small businesses looking to establish online presence.</p>
+                        </div>
+                        
+                        {/* Features List */}
+                        <div className="space-y-4 mb-8">
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Responsive Design (Mobile & Desktop)</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Up to 5 Pages (Home, About, Services, Contact)</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Contact Form & Google Maps Integration</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Basic SEO Optimization</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">SSL Certificate & Domain Setup</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">3 Months Free Support</span>
+                            </div>
+                        </div>
+                        
+                        {/* Price */}
+                        <div className="text-center mb-8">
+                            <span className="text-4xl font-bold text-gray-900">₹25,000</span>
+                            <span className="text-gray-600"> - ₹45,000</span>
+                        </div>
+                        
+                        {/* CTA Button */}
+                        <button className="w-full bg-green-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-green-700 hover:scale-105 transform transition-all duration-300 shadow-md hover:shadow-lg">
+                            Get Started
+                        </button>
+                    </div>
+                    
+                    {/* Full-Stack Web App (Most Popular) */}
+                    <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-blue-500 relative transform scale-105 hover:shadow-2xl hover:scale-110 transition-all duration-300 cursor-pointer group">
+                        {/* Most Popular Badge */}
+                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                            <span className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
+                                Most Popular
+                            </span>
+                        </div>
+                        
+                        <div className="text-center mb-6 mt-4">
+                            <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <span className="text-2xl">⚡</span>
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">Full-Stack Web App</h3>
+                            <p className="text-gray-600 leading-relaxed">Complete web application with custom features and database integration.</p>
+                        </div>
+                        
+                        {/* Features List */}
+                        <div className="space-y-4 mb-8">
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Custom Web Application (React/Next.js)</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Backend API Development (Node.js/Python)</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Database Design & Integration</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">User Authentication & Authorization</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Admin Panel & Dashboard</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Payment Gateway Integration</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Cloud Hosting & Deployment</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">6 Months Support & Maintenance</span>
+                            </div>
+                        </div>
+                        
+                        {/* Price */}
+                        <div className="text-center mb-8">
+                            <span className="text-4xl font-bold text-blue-600">₹1,50,000</span>
+                            <span className="text-gray-600"> - ₹5,00,000</span>
+                        </div>
+                        
+                        {/* CTA Button */}
+                        <button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-blue-600 hover:to-blue-700 hover:scale-105 transform transition-all duration-300 shadow-md hover:shadow-lg">
+                            Choose Professional
+                        </button>
+                    </div>
+                    
+                    {/* Mobile App Development */}
+                    <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200 hover:shadow-xl hover:scale-105 hover:border-gray-300 transition-all duration-300 cursor-pointer group">
+                        <div className="text-center mb-6">
+                            <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <span className="text-2xl">📱</span>
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">Mobile App Development</h3>
+                            <p className="text-gray-600 leading-relaxed">Native iOS & Android apps or Cross-platform solutions with React Native.</p>
+                        </div>
+                        
+                        {/* Features List */}
+                        <div className="space-y-4 mb-8">
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Cross-Platform App (React Native/Flutter)</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">iOS & Android Compatible</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Push Notifications & Offline Support</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">API Integration & Database Sync</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">App Store & Play Store Submission</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">In-App Purchases & Analytics</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Security & Performance Optimization</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">1 Year Support & Updates</span>
+                            </div>
+                        </div>
+                        
+                        {/* Price */}
+                        <div className="text-center mb-8">
+                            <span className="text-4xl font-bold text-gray-900">₹2,50,000</span>
+                            <span className="text-gray-600"> - ₹8,00,000</span>
+                        </div>
+                        
+                        {/* CTA Button */}
+                        <button className="w-full bg-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-purple-700 hover:scale-105 transform transition-all duration-300 shadow-md hover:shadow-lg">
+                            Request Quote
+                        </button>
+                    </div>
+                </div>
+
+                {/* Additional Features Section */}
+                <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">
+                        Additional Services & Add-ons
+                    </h3>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                            <span className="text-3xl mb-2 block">🤖</span>
+                            <h4 className="font-semibold text-gray-900 mb-2">AI Integration</h4>
+                            <p className="text-sm text-gray-600">ChatGPT, Machine Learning APIs</p>
+                            <p className="font-bold text-blue-600 mt-2">From ₹50,000</p>
+                        </div>
+                        <div className="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                            <span className="text-3xl mb-2 block">🛒</span>
+                            <h4 className="font-semibold text-gray-900 mb-2">E-commerce</h4>
+                            <p className="text-sm text-gray-600">Full online store setup</p>
+                            <p className="font-bold text-blue-600 mt-2">From ₹75,000</p>
+                        </div>
+                        <div className="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                            <span className="text-3xl mb-2 block">☁️</span>
+                            <h4 className="font-semibold text-gray-900 mb-2">Cloud Migration</h4>
+                            <p className="text-sm text-gray-600">AWS, Azure, Google Cloud</p>
+                            <p className="font-bold text-blue-600 mt-2">From ₹25,000</p>
+                        </div>
+                        <div className="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                            <span className="text-3xl mb-2 block">🔒</span>
+                            <h4 className="font-semibold text-gray-900 mb-2">Security Audit</h4>
+                            <p className="text-sm text-gray-600">Penetration testing & fixes</p>
+                            <p className="font-bold text-blue-600 mt-2">From ₹30,000</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom CTA */}
+                <div className="text-center mt-16">
+                    <p className="text-gray-600 mb-6">
+                        Have a custom project in mind? Let's discuss your technical requirements and timeline.
+                    </p>
+                    <div className="space-x-4">
+                        
+                        <Link to='/about'><button className="bg-gray-100 text-gray-700 px-8 py-3 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
+                            View Portfolio
+                        </button></Link>
+                    </div>
+                </div>
+            </div>
+    </section>
+
       {/* Portfolio Section  */}
     <section className="py-20 bg-white">
         <div className="container mx-auto px-6">
@@ -411,11 +663,14 @@ export default function Web() {
             <h2 className="text-4xl font-bold mb-6">Ready to Build Your Next Digital Solution?</h2>
             <p className="text-xl mb-8 text-blue-100">Let's transform your ideas into powerful web and mobile applications</p>
             <div className="flex flex-col sm:flex-row justify-center gap-4">
-                <button className="serviceweb-cta-secondary bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-50 transition duration-300">
-                    <i className="fas fa-play mr-2"></i>Request a Demo
-                </button>
-                <button className="serviceweb-cta-primary bg-blue-800 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-900 transition duration-300 border-2 border-blue-800">
-                    <i className="fas fa-quote-left mr-2"></i>Get a Free Quote
+                
+                <button 
+                onClick={() => {
+                    setModalFormType('quote');
+                    setShowModal(true);
+                    }}
+                className="serviceweb-cta-primary bg-blue-800 text-white px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-900 transition duration-300 border-2 border-blue-800">
+                    Get a Free Quote
                 </button>
             </div>
         </div>
@@ -475,133 +730,7 @@ export default function Web() {
         </div>
     </section>
 
-     {/* Contact Section  */}
-    <section className="py-20 bg-white">
-        <div className="container mx-auto px-6">
-            <div className="max-w-5xl mx-auto">
-                <div className="text-center mb-12">
-                    <h2 className="text-4xl font-bold text-gray-800 mb-4">Let's Start Your Project</h2>
-                    <p className="text-lg text-gray-600">Get in touch with our development experts</p>
-                </div>
-
-                <div className="grid lg:grid-cols-2 gap-12">
-                     {/* Contact Form  */}
-                    <div className="serviceweb-contact-form">
-                        <form className="space-y-6">
-                            <div className="grid md:grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Name *</label>
-                                    <input type="text" className="serviceweb-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Your full name"/>
-                                </div>
-                                <div>
-                                    <label className="block text-sm font-medium text-gray-700 mb-2">Email *</label>
-                                    <input type="email" className="serviceweb-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="your@email.com"/>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Phone</label>
-                                <input type="tel" className="serviceweb-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="+91 12345 67890"/>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Project Type</label>
-                                <select className="serviceweb-select w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                                    <option>Select project type</option>
-                                    <option>Web Development</option>
-                                    <option>Mobile App Development</option>
-                                    <option>Full Stack Development</option>
-                                    <option>E-commerce Solution</option>
-                                    <option>AI/ML Integration</option>
-                                    <option>Other</option>
-                                </select>
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Project Requirements *</label>
-                                <textarea rows="4" className="serviceweb-textarea w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Tell us about your project requirements, goals, and timeline..."></textarea>
-                            </div>
-
-                            <button type="submit" className="serviceweb-submit-btn w-full bg-blue-600 text-white py-4 rounded-lg text-lg font-semibold hover:bg-blue-700 transition duration-300">
-                                <i className="fas fa-paper-plane mr-2"></i>Send Project Details
-                            </button>
-                        </form>
-                    </div>
-
-                    {/* Contact Info  */}
-                    <div className="serviceweb-contact-info">
-                        <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-8 rounded-2xl h-full">
-                            <h3 className="text-2xl font-bold text-gray-800 mb-6">Get In Touch</h3>
-                            
-                            <div className="space-y-6">
-                                <div className="serviceweb-contact-item flex items-start">
-                                    <div className="serviceweb-contact-icon bg-blue-600 text-white p-3 rounded-full mr-4 mt-1">
-                                        <i className="fas fa-map-marker-alt"></i>
-                                    </div>
-                                    <div>
-                                        <h4 className="font-semibold text-gray-800 mb-1">Office Address</h4>
-                                        <p className="text-gray-600">Jaipur, Rajasthan, India</p>
-                                        <p className="text-gray-600">Tech Hub, Software Development Center</p>
-                                    </div>
-                                </div>
-
-                                <div className="serviceweb-contact-item flex items-start">
-                                    <div className="serviceweb-contact-icon bg-blue-600 text-white p-3 rounded-full mr-4 mt-1">
-                                        <i className="fas fa-phone"></i>
-                                    </div>
-                                    <div>
-                                        <h4 className="font-semibold text-gray-800 mb-1">Phone & WhatsApp</h4>
-                                        <p className="text-gray-600">+91 12345 67890</p>
-                                        <p className="text-blue-600 text-sm">Available 24/7 for urgent projects</p>
-                                    </div>
-                                </div>
-
-                                <div className="serviceweb-contact-item flex items-start">
-                                    <div className="serviceweb-contact-icon bg-blue-600 text-white p-3 rounded-full mr-4 mt-1">
-                                        <i className="fas fa-envelope"></i>
-                                    </div>
-                                    <div>
-                                        <h4 className="font-semibold text-gray-800 mb-1">Email</h4>
-                                        <p className="text-gray-600">info@softpro9.com</p>
-                                        <p className="text-gray-600">projects@softpro9.com</p>
-                                    </div>
-                                </div>
-
-                                <div className="serviceweb-contact-item flex items-start">
-                                    <div className="serviceweb-contact-icon bg-blue-600 text-white p-3 rounded-full mr-4 mt-1">
-                                        <i className="fas fa-clock"></i>
-                                    </div>
-                                    <div>
-                                        <h4 className="font-semibold text-gray-800 mb-1">Business Hours</h4>
-                                        <p className="text-gray-600">Mon - Fri: 9:00 AM - 7:00 PM</p>
-                                        <p className="text-gray-600">Sat: 10:00 AM - 4:00 PM</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="serviceweb-social-links mt-8 pt-6 border-t border-blue-200">
-                                <h4 className="font-semibold text-gray-800 mb-4">Connect With Us</h4>
-                                <div className="flex space-x-4">
-                                    <a href="#" className="serviceweb-social-icon bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition duration-300">
-                                        <i className="fab fa-linkedin-in"></i>
-                                    </a>
-                                    <a href="#" className="serviceweb-social-icon bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition duration-300">
-                                        <i className="fab fa-twitter"></i>
-                                    </a>
-                                    <a href="#" className="serviceweb-social-icon bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition duration-300">
-                                        <i className="fab fa-github"></i>
-                                    </a>
-                                    <a href="#" className="serviceweb-social-icon bg-blue-600 text-white p-3 rounded-full hover:bg-blue-700 transition duration-300">
-                                        <i className="fab fa-whatsapp"></i>
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
+   
     </>
   )
 }

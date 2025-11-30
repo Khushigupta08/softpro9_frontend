@@ -1,14 +1,17 @@
 // import React from 'react'
 import './style.css';
+import ScrollArrowButton from './ScrollArrowButton';
 
 export default function Industries() {
   return (
     <>
+              <ScrollArrowButton />
+
      {/* Hero Section  */}
     <section className="industries-gradient-bg text-white py-20">
         <div className="max-w-7xl mx-auto px-6">
             <div className="text-center">
-                <h1 className="text-5xl md:text-6xl font-bold mb-6 industries-floating">
+                <h1 className="text-5xl md:text-6xl font-bold mb-6">
                     Industries We <span className="text-blue-200">Transform</span>
                 </h1>
                 <p className="text-xl md:text-2xl text-blue-100 max-w-4xl mx-auto leading-relaxed">

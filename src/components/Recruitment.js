@@ -1,7 +1,16 @@
+import { Helmet } from 'react-helmet-async';
+import ScrollArrowButton from './ScrollArrowButton';
+import { Link } from "react-router-dom";
 
 export default function Recruitment() {
   return (
     <>
+              <ScrollArrowButton />
+
+    <Helmet>
+            <title>Recruitment - Softpro9</title>
+            <meta name="description" content="Explore job opportunities" />
+        </Helmet>
     {/* Hero Image Section */}
 <section className="relative h-96 md:h-[500px] lg:h-[600px] overflow-hidden">
     <div className="absolute inset-0 bg-gradient-to-r from-blue-900/80 to-blue-600/80 z-10"></div>
@@ -26,9 +35,9 @@ export default function Recruitment() {
     <section className="recruitment-gradient-bg text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-                <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
+                <h2 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                     Smart Recruitment Solutions for a Smarter Workforce
-                </h1>
+                </h2>
                 <p className="text-xl md:text-2xl mb-8 max-w-4xl mx-auto opacity-90">
                     At SoftPro9 IT Services, we believe that the success of every business begins with the right people. Talent drives innovation, accelerates growth, and builds resilience in a rapidly evolving business landscape.
                 </p>
@@ -39,12 +48,10 @@ export default function Recruitment() {
                     We go beyond traditional hiring by combining industry expertise, advanced technologies, and AI-driven recruitment strategies to deliver faster, more reliable, and more cost-effective talent solutions. With SoftPro9 Recruitment Services, you don't just fill a vacancy — you gain a long-term partner in building a stronger workforce.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                    <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition duration-300 shadow-lg">
-                        Hire Talent Today
-                    </button>
-                    <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300">
+                    <Link to='/carrer'><button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition duration-300 shadow-lg">
                         Apply Now
-                    </button>
+                    </button></Link>
+                    
                 </div>
             </div>
         </div>
@@ -467,9 +474,9 @@ export default function Recruitment() {
                     <p className="text-gray-700 mb-8">
                         Whether you need a full-time employee, a contractor, or an executive leader, SoftPro9 delivers talent that powers business success.
                     </p>
-                    <button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
+                    <Link to='/contact'><button className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300">
                         Hire Talent Today
-                    </button>
+                    </button></Link>
                 </div>
 
                  {/* For Candidates  */}
@@ -507,9 +514,9 @@ export default function Recruitment() {
                     <p className="text-gray-700 mb-8">
                         Your journey doesn't end with placement — we support you in career growth and development.
                     </p>
-                    <button className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition duration-300">
+                    <Link to='/carrer'><button className="bg-green-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-green-700 transition duration-300">
                         Apply Now
-                    </button>
+                    </button></Link>
                 </div>
             </div>
         </div>
@@ -644,7 +651,7 @@ export default function Recruitment() {
     <section className="py-20 recruitment-gradient-bg text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
-                <h1 className="text-4xl md:text-5xl font-bold mb-6">Call-to-Action – Let's Build the Future Together</h1>
+                <h2 className="text-4xl md:text-5xl font-bold mb-6">Call-to-Action – Let's Build the Future Together</h2>
                 <p className="text-xl mb-8 max-w-3xl mx-auto opacity-90">
                     Are you looking for the right talent to power your business? Or are you a candidate searching for your next big opportunity?
                 </p>
@@ -654,15 +661,15 @@ export default function Recruitment() {
                 <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
                     <div className="text-center">
                         <h3 className="text-2xl font-bold mb-4">👉 For Employers:</h3>
-                        <button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition duration-300 shadow-lg">
+                        <Link to='/contact'><button className="bg-white text-blue-600 px-8 py-4 rounded-lg font-semibold hover:bg-gray-100 transition duration-300 shadow-lg">
                             Hire Talent Today
-                        </button>
+                        </button></Link>
                     </div>
                     <div className="text-center">
                         <h3 className="text-2xl font-bold mb-4">👉 For Job Seekers:</h3>
-                        <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300">
+                        <Link to='/carrer'><button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold">
                             Apply Now
-                        </button>
+                        </button></Link>
                     </div>
                 </div>
             </div>

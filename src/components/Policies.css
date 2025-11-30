@@ -1,0 +1,294 @@
+.privacypolicy-container {
+            background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+        }
+        
+        .privacypolicy-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        
+        .privacypolicy-heading {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .privacypolicy-accent {
+            border-left: 4px solid #3b82f6;
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.05), transparent);
+        }
+        
+        .privacypolicy-highlight {
+            background: rgba(59, 130, 246, 0.08);
+            border-radius: 6px;
+        }
+        
+        .privacypolicy-list-item {
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .privacypolicy-list-item::before {
+            content: "•";
+            color: #3b82f6;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .privacypolicy-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
+        }
+        
+        .privacypolicy-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+        }
+        
+        @media (max-width: 768px) {
+            .privacypolicy-container {
+                padding: 1rem;
+            }
+        }
+
+        /* terms and conditions */
+        .terms-container {
+            background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+        }
+        
+        .terms-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        
+        .terms-heading {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .terms-accent {
+            border-left: 4px solid #3b82f6;
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.05), transparent);
+        }
+        
+        .terms-highlight {
+            background: rgba(59, 130, 246, 0.08);
+            border-radius: 6px;
+        }
+        
+        .terms-list-item {
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .terms-list-item::before {
+            content: "•";
+            color: #3b82f6;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .terms-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
+        }
+        
+        .terms-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+        }
+        
+        .terms-warning {
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.05), transparent);
+            border-left: 4px solid #ef4444;
+        }
+        
+        .terms-success {
+            background: linear-gradient(90deg, rgba(34, 197, 94, 0.05), transparent);
+            border-left: 4px solid #22c55e;
+        }
+        
+        @media (max-width: 768px) {
+            .terms-container {
+                padding: 1rem;
+            }
+        }
+
+        /* refunds css */
+        .refund-container {
+            background: linear-gradient(135deg, #f8faff 0%, #ffffff 100%);
+        }
+        
+        .refund-section {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(59, 130, 246, 0.1);
+        }
+        
+        .refund-heading {
+            background: linear-gradient(135deg, #1e40af, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .refund-accent {
+            border-left: 4px solid #3b82f6;
+            background: linear-gradient(90deg, rgba(59, 130, 246, 0.05), transparent);
+        }
+        
+        .refund-highlight {
+            background: rgba(59, 130, 246, 0.08);
+            border-radius: 6px;
+        }
+        
+        .refund-list-item {
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .refund-list-item::before {
+            content: "•";
+            color: #3b82f6;
+            font-weight: bold;
+            position: absolute;
+            left: 0;
+        }
+        
+        .refund-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
+        }
+        
+        .refund-divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, #3b82f6, transparent);
+        }
+        
+        .refund-eligible {
+            background: linear-gradient(90deg, rgba(34, 197, 94, 0.05), transparent);
+            border-left: 4px solid #22c55e;
+        }
+        
+        .refund-not-eligible {
+            background: linear-gradient(90deg, rgba(239, 68, 68, 0.05), transparent);
+            border-left: 4px solid #ef4444;
+        }
+        
+        .refund-warning {
+            background: linear-gradient(90deg, rgba(245, 158, 11, 0.05), transparent);
+            border-left: 4px solid #f59e0b;
+        }
+        
+        .refund-process-step {
+            background: linear-gradient(135deg, #e0f2fe, #f0f9ff);
+            border: 2px solid #3b82f6;
+            position: relative;
+        }
+        
+        .refund-process-step::before {
+            content: attr(data-step);
+            position: absolute;
+            top: -12px;
+            left: 16px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        @media (max-width: 768px) {
+            .refund-container {
+                padding: 1rem;
+            }
+        }
+
+        /* faq css */
+        .faq-container {
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+        
+        .faq-header {
+            background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
+        }
+        
+        .faq-section {
+            border-left: 4px solid #3b82f6;
+            transition: all 0.3s ease;
+        }
+        
+        .faq-section:hover {
+            border-left-color: #1e40af;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+        }
+        
+        .faq-item {
+            border-bottom: 1px solid #e2e8f0;
+            transition: background-color 0.2s ease;
+        }
+        
+        .faq-item:hover {
+            background-color: #f8fafc;
+        }
+        
+        .faq-question {
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+        
+        .faq-question:hover {
+            color: #1e40af;
+        }
+        
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        
+        .faq-answer.open {
+            max-height: 1000px;
+        }
+        
+        .faq-icon {
+            transition: transform 0.3s ease;
+        }
+        
+        .faq-icon.rotated {
+            transform: rotate(45deg);
+        }
+        
+        .faq-nav {
+            position: sticky;
+            top: 20px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .faq-nav-item {
+            transition: all 0.2s ease;
+        }
+        
+        .faq-nav-item:hover {
+            background-color: #eff6ff;
+            color: #1e40af;
+        }
+        
+        .faq-contact-card {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            border: 1px solid #93c5fd;
+        }

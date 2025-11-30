@@ -1,9 +1,14 @@
-import { useEffect } from "react";
+import { useEffect,useState } from "react";
 // import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { Link } from "react-router-dom";
 import './style.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faBalanceScale, faChartLine, faLightbulb, faUser} from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import 'react-quill-new/dist/quill.snow.css';
+import parse from 'html-react-parser';
+import { Helmet } from 'react-helmet-async';
+import ScrollArrowButton from './ScrollArrowButton';
 
 
 export default function Carrer() {
@@ -54,8 +59,145 @@ export default function Carrer() {
     };
   }, []);
 
+  const [jobs, setJobs] = useState([]);
+  const [showResumeModal, setShowResumeModal] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedJob, setSelectedJob] = useState(null);
+  const [form, setForm] = useState({
+    // Initialize with required form fields as in PDF
+    name: "",
+    email: "",
+    phone: "",
+    position: "",
+    experience: "",
+    fresher: false,
+    cover_letter: "",
+    current_ctc_amount: "",
+    current_ctc_currency: "INR",
+    current_ctc_period: "Per Annum",
+    expected_ctc_amount: "",
+    expected_ctc_currency: "INR",
+    expected_ctc_period: "Per Annum",
+    resume: null,
+    skills: {
+      React: false,
+      NodeJS: false,
+      Angular: false,
+      Django: false,
+      Other: false,
+      otherSkillText: ""
+    }
+  });
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+  const fetchJobs = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/api/jobs");
+      setJobs(res.data);
+    } catch (err) {
+      console.error("Failed to fetch jobs", err);
+    }
+  };
+
+  const openApplyForm = (job) => {
+    setSelectedJob(job);
+    setForm(prev => ({ ...prev, position: job.title })); // set position to job title
+    setShowModal(true);
+  };
+
+  const closeApplyForm = () => {
+    setShowModal(false);
+    // Clear form
+    setForm({
+      name: "",
+      email: "",
+      phone: "",
+      position: "",
+      experience: "",
+      fresher: false,
+      cover_letter: "",
+      current_ctc_amount: "",
+      current_ctc_currency: "INR",
+      current_ctc_period: "Per Annum",
+      expected_ctc_amount: "",
+      expected_ctc_currency: "INR",
+      expected_ctc_period: "Per Annum",
+      resume: null,
+      skills: {
+        React: false,
+        NodeJS: false,
+        Angular: false,
+        Django: false,
+        Other: false,
+        otherSkillText: ""
+      }
+    });
+  };
+
+  const handleInputChange = (e) => {
+  const { name, value, type, checked, files } = e.target;
+
+  if (type === "checkbox") {
+    setForm(prev => ({ ...prev, [name]: checked }));
+  } else if (files) {
+    if (name === "resume") {
+      const file = files[0];
+      if (file && file.size > 3 * 1024 * 1024) { // 3 MB (in bytes)
+        alert("File size should not exceed 3 MB.");
+        e.target.value = ""; // Clear the input
+        return;
+      }
+      setForm(prev => ({ ...prev, [name]: file }));
+    } else {
+      setForm(prev => ({ ...prev, [name]: files[0] }));
+    }
+  } else {
+    setForm(prev => ({ ...prev, [name]: value }));
+  }
+};
+
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const formData = new FormData();
+      Object.keys(form).forEach(key => {
+        if (key === "skills") {
+          Object.entries(form.skills).forEach(([k,v]) => {
+            formData.append(`skills[${k}]`, v);
+          });
+        } else {
+          formData.append(key, form[key]);
+        }
+      });
+      await axios.post("http://localhost:5000/api/applications", formData, {
+        headers: { "Content-Type": "multipart/form-data" }
+      });
+      alert("Application submitted successfully!");
+      closeApplyForm();
+    } catch (err) {
+      alert("Error submitting application.");
+      console.error(err);
+    }
+  };
+
+function formatNumberWithCommas(value) {
+  if (!value) return '';
+  // Remove anything which is not a digit
+  const num = value.toString().replace(/[^\d]/g, '');
+  return num.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
   return (
     <>
+              <ScrollArrowButton />
+
+    <Helmet>
+            <title>Career - Softpro9</title>
+            <meta name="description" content="Join our team bamglore" />
+    </Helmet>
     {/* Hero Section  */}
     <section className="hero-careers">
         <div className="container">
@@ -127,7 +269,7 @@ export default function Carrer() {
           {/* Right - Team Image */}
           <div className="flex justify-center">
             <img
-            src="/images/career_image.avif"
+            src={`${process.env.PUBLIC_URL || ''}/images/career_image.avif`}
             alt="Happy employees team working together"
             className="rounded-2xl shadow-lg w-full max-w-md object-cover h-80"
             />
@@ -189,90 +331,355 @@ export default function Carrer() {
 
     {/* Job Openings Section  */}
     <section id="open-positions" className="jobs-section">
-        <div className="container">
-            <h2 className="section-titles fade-in-up">Current Job Openings</h2>
-            <p className="section-subtitles fade-in-up">Join our talented team and be part of exciting projects that shape the digital future.</p>
-            
-            <div className="row">
-                <div className="col-lg-6 mb-4">
-                    <div className="job-card fade-in-up">
-                        <h3 className="job-title">Senior Full Stack Developer</h3>
-                        <span className="job-department">Development Team</span>
-                        <p className="job-description">Lead the development of scalable web applications using modern technologies. Work on challenging projects that serve thousands of users globally.</p>
-                        <div className="job-requirements">
-                            <h6>Key Requirements:</h6>
-                            <ul>
-                                <li>5+ years experience in React/Node.js</li>
-                                <li>Strong knowledge of databases (MySQL, MongoDB)</li>
-                                <li>Experience with cloud platforms (AWS/Azure)</li>
-                                <li>Leadership and mentoring skills</li>
-                            </ul>
-                        </div>
-                        <Link to="/" className="apply-btn" onclick="applyForJob('Senior Full Stack Developer')">
-                            <i className="fas fa-paper-plane me-2"></i>Apply Now
-                        </Link>
-                    </div>
+      <div className="container">
+        <h2 className="section-titles fade-in-up">Current Job Openings</h2>
+        <p className="section-subtitles fade-in-up">
+          Join our talented team and be part of exciting projects that shape the digital future.
+        </p>
+
+        <div className="row">
+          {jobs.map((job) => (
+            <div key={job.id} className="col-lg-6 mb-4">
+              <div className="job-card fade-in-up">
+                <h3 className="job-title">{job.title}</h3>
+                <span className="job-department">{job.department}</span>
+                <p className="job-description" dangerouslySetInnerHTML={{ __html: job.description }}/>
+                <div className="job-requirements">
+                  <h6>Key Requirements:</h6>
+                  <ul>
+                        {parse(job.requirement).map((el, idx) => {
+                        // Agar ye <p> tags hain to unka content <li> me daal do
+                        if (el.type === 'p') {
+                            return <li key={idx}>{el.props.children}</li>;
+                        }
+                        return null;
+                        })}
+                    </ul>
                 </div>
-                <div className="col-lg-6 mb-4">
-                    <div className="job-card fade-in-up">
-                        <h3 className="job-title">Digital Marketing Specialist</h3>
-                        <span className="job-department">Marketing Team</span>
-                        <p className="job-description">Drive digital marketing campaigns, SEO strategies, and social media presence. Help brands achieve exceptional online visibility and growth.</p>
-                        <div className="job-requirements">
-                            <h6>Key Requirements:</h6>
-                            <ul>
-                                <li>3+ years in digital marketing</li>
-                                <li>Google Ads & Facebook Ads expertise</li>
-                                <li>SEO/SEM knowledge</li>
-                                <li>Analytics and reporting skills</li>
-                            </ul>
-                        </div>
-                        <Link to="/" className="apply-btn" onclick="applyForJob('Digital Marketing Specialist')">
-                            <i className="fas fa-paper-plane me-2"></i>Apply Now
-                        </Link>
-                    </div>
-                </div>
-                <div className="col-lg-6 mb-4">
-                    <div className="job-card fade-in-up">
-                        <h3 className="job-title">UI/UX Designer</h3>
-                        <span className="job-department">Design Team</span>
-                        <p className="job-description">Create beautiful, intuitive user experiences that delight customers. Work on diverse projects from mobile apps to enterprise software.</p>
-                        <div className="job-requirements">
-                            <h6>Key Requirements:</h6>
-                            <ul>
-                                <li>4+ years in UI/UX design</li>
-                                <li>Proficiency in Figma, Adobe XD</li>
-                                <li>User research and testing experience</li>
-                                <li>Portfolio of successful projects</li>
-                            </ul>
-                        </div>
-                        <Link to="/" className="apply-btn" onclick="applyForJob('UI/UX Designer')">
-                            <i className="fas fa-paper-plane me-2"></i>Apply Now
-                        </Link>
-                    </div>
-                </div>
-                <div className="col-lg-6 mb-4">
-                    <div className="job-card fade-in-up">
-                        <h3 className="job-title">Training Specialist</h3>
-                        <span className="job-department">SoftPro9 Academy</span>
-                        <p className="job-description">Shape the next generation of developers through our academy programs. Deliver high-quality training in web development and software engineering.</p>
-                        <div className="job-requirements">
-                            <h6>Key Requirements:</h6>
-                            <ul>
-                                <li>5+ years software development experience</li>
-                                <li>Teaching or training background</li>
-                                <li>Expertise in multiple programming languages</li>
-                                <li>Excellent communication skills</li>
-                            </ul>
-                        </div>
-                        <Link to="/" className="apply-btn" onclick="applyForJob('Training Specialist')">
-                            <i className="fas fa-paper-plane me-2"></i>Apply Now
-                        </Link>
-                    </div>
-                </div>
-                
+                <button className="apply-btn" onClick={() => openApplyForm(job)}>
+                  <i className="fas fa-paper-plane me-2"></i>Apply Now
+                </button>
+              </div>
             </div>
+          ))}
         </div>
+      </div>
+
+      {/* Modal for Apply form */}
+{showModal && (
+  <div 
+    className="modal" 
+    style={{
+      position: "fixed",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      backgroundColor: "rgba(0, 0, 0, 0.6)",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
+      zIndex: 1000,
+      padding: "20px"
+    }}
+    onClick={closeApplyForm}
+  >
+    <div 
+      className="modal-content bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col md:flex-row" 
+      onClick={e => e.stopPropagation()}
+    >
+      {/* Left Side - Blue Section */}
+      <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-8 md:p-10 md:w-2/5 flex flex-col justify-center relative">
+        <div className="mb-6">
+          <div className="text-5xl mb-4">🎓</div>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+            Apply for {selectedJob.title}
+          </h2>
+          <p className="text-blue-100 text-base mb-8">
+            Submit your details and take the next step in your career journey
+          </p>
+        </div>
+
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <div className="text-2xl">✓</div>
+            <div>
+              <h4 className="font-semibold text-lg">Quick Application</h4>
+              <p className="text-blue-100 text-sm">Simple and fast process</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <div className="text-2xl">✓</div>
+            <div>
+              <h4 className="font-semibold text-lg">Expert Guidance</h4>
+              <p className="text-blue-100 text-sm">Career counseling support</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <div className="text-2xl">✓</div>
+            <div>
+              <h4 className="font-semibold text-lg">Top Opportunities</h4>
+              <p className="text-blue-100 text-sm">Access to best companies</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Decorative elements */}
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-blue-800/30 to-transparent"></div>
+      </div>
+
+      {/* Right Side - Form Section */}
+      <div className="bg-white p-6 md:p-8 md:w-3/5 overflow-y-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-2xl font-bold text-gray-800">Submit Your Application</h3>
+          <button
+            type="button"
+            className="text-gray-400 hover:text-red-500 text-3xl font-bold leading-none transition-colors"
+            onClick={closeApplyForm}
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+
+        <p className="text-gray-600 text-sm mb-6">
+          Fill in your details to apply for this position
+        </p>
+
+        <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Your Full Name *</label>
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleInputChange}
+              required
+              placeholder="Enter your full name"
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Email Address *</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleInputChange}
+              required
+              placeholder="your.email@example.com"
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Phone Number</label>
+            <input
+              type="text"
+              name="phone"
+              value={form.phone}
+              onChange={handleInputChange}
+              placeholder="Enter your phone number"
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Location *</label>
+            <select
+              name="location"
+              value={form.location || ''}
+              onChange={handleInputChange}
+              required
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800 bg-white"
+            >
+              <option value="">Select your location</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Bangalore">Bangalore</option>
+              <option value="Hyderabad">Hyderabad</option>
+              <option value="Chennai">Chennai</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Position</label>
+            <input
+              type="text"
+              name="position"
+              value={form.position}
+              readOnly
+              className="w-full border border-gray-200 rounded-lg px-4 py-3 bg-gray-50 text-gray-600 cursor-not-allowed"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block mb-2 font-medium text-gray-700 text-sm">Experience (Years)</label>
+              <input
+                type="number"
+                min="0"
+                step="0.1"
+                name="experience"
+                value={form.experience}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
+                placeholder="0"
+              />
+            </div>
+            <div className="flex items-end">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="fresher"
+                  checked={form.fresher}
+                  onChange={handleInputChange}
+                  className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="font-medium text-gray-700">I am a Fresher</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Cover Letter (Optional)</label>
+            <textarea
+              name="cover_letter"
+              value={form.cover_letter}
+              onChange={handleInputChange}
+              rows={3}
+              placeholder="Tell us why you're a great fit for this role..."
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800 resize-none"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block mb-2 font-medium text-gray-700 text-sm">Current CTC</label>
+              <input
+                type="text"
+                name="current_ctc_amount"
+                value={formatNumberWithCommas(form.current_ctc_amount)}
+                onChange={e => {
+                  const rawValue = e.target.value.replace(/[^\d]/g, '');
+                  handleInputChange({
+                    target: {
+                      name: 'current_ctc_amount',
+                      value: rawValue,
+                    }
+                  });
+                }}
+                placeholder="Amount"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
+                inputMode="numeric"
+                autoComplete="off"
+              />
+              <div className="flex gap-2 mt-2">
+                <select 
+                  name="current_ctc_currency" 
+                  value={form.current_ctc_currency} 
+                  onChange={handleInputChange}
+                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                >
+                  <option>INR</option>
+                  <option>USD</option>
+                  <option>AED</option>
+                  <option>SGD</option>
+                  <option>UAE</option>
+                </select>
+                <select 
+                  name="current_ctc_period" 
+                  value={form.current_ctc_period} 
+                  onChange={handleInputChange}
+                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                >
+                  <option>Per Annum</option>
+                  <option>Per Month</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="block mb-2 font-medium text-gray-700 text-sm">Expected CTC</label>
+              <input
+                type="text"
+                name="expected_ctc_amount"
+                value={formatNumberWithCommas(form.expected_ctc_amount)}
+                onChange={e => {
+                  const rawValue = e.target.value.replace(/[^\d]/g, '');
+                  handleInputChange({
+                    target: {
+                      name: 'expected_ctc_amount',
+                      value: rawValue,
+                    }
+                  });
+                }}
+                placeholder="Amount"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
+                inputMode="numeric"
+                autoComplete="off"
+              />
+              <div className="flex gap-2 mt-2">
+                <select 
+                  name="expected_ctc_currency" 
+                  value={form.expected_ctc_currency} 
+                  onChange={handleInputChange}
+                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                >
+                  <option>INR</option>
+                  <option>USD</option>
+                  <option>AED</option>
+                  <option>SGD</option>
+                  <option>UAE</option>
+                </select>
+                <select 
+                  name="expected_ctc_period" 
+                  value={form.expected_ctc_period} 
+                  onChange={handleInputChange}
+                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                >
+                  <option>Per Annum</option>
+                  <option>Per Month</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Upload Resume *</label>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+              <input
+                type="file"
+                name="resume"
+                accept=".pdf,.doc,.docx"
+                onChange={handleInputChange}
+                required
+                className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+              />
+              <p className="text-xs text-gray-500 mt-2">PDF, DOC, or DOCX (Max 5MB)</p>
+            </div>
+          </div>
+
+          <div className="flex gap-3 mt-6 pt-4">
+            <button
+              type="submit"
+              className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-lg transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+            >
+              Submit Application
+            </button>
+            <button
+              type="button"
+              onClick={closeApplyForm}
+              className="px-6 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 rounded-lg transition-all"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+)}
     </section>
 
     {/* Internship and graduate programms */}
@@ -309,19 +716,14 @@ export default function Carrer() {
                         Work on cutting-edge projects that impact millions of users. Build production-ready solutions and contribute to meaningful products from day one.
                     </p>
                     <div className="flex items-center text-blue-600 font-semibold">
-                        <span>Hands-on experience</span>
-                        <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                        </svg>
+                        
                     </div>
                 </div>
 
                {/* Mentorship Card  */}
                 <div className="intern-card-hover intern-float-animation intern-float-delay-1 bg-white border-2 border-blue-100 rounded-2xl p-8 shadow-lg hover:shadow-2xl transition-all duration-500">
                     <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-700 rounded-2xl flex items-center justify-center mb-6 hover:rotate-6 transition-transform duration-300">
-                        <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                        </svg>
+                        
                     </div>
                     <h3 className="text-2xl font-bold text-gray-800 mb-4 hover:text-blue-600 transition-colors duration-300">
                         Expert Mentorship
@@ -330,10 +732,7 @@ export default function Carrer() {
                         Learn from industry veterans and senior engineers. Get personalized guidance, code reviews, and career advice to accelerate your professional growth.
                     </p>
                     <div className="flex items-center text-blue-600 font-semibold">
-                        <span>1-on-1 guidance</span>
-                        <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                        </svg>
+                       
                     </div>
                 </div>
 
@@ -351,10 +750,7 @@ export default function Carrer() {
                         Outstanding performers get fast-tracked to permanent roles. Turn your internship into a thriving career with competitive packages and growth opportunities.
                     </p>
                     <div className="flex items-center text-blue-600 font-semibold">
-                        <span>Career acceleration</span>
-                        <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
-                        </svg>
+                        
                     </div>
                 </div>
             </div>
@@ -369,12 +765,12 @@ export default function Carrer() {
                         Join thousands of successful graduates who launched their careers with us
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <button className="intern-btn-hover px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold rounded-full transition-all duration-300 shadow-lg">
-                            Apply for Internship
-                        </button>
-                        <button className="intern-btn-hover px-8 py-4 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold rounded-full transition-all duration-300">
-                            View Graduate Programs
-                        </button>
+                        <Link to='/franchise'><button className="intern-btn-hover px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold rounded-full transition-all duration-300 shadow-lg">
+                            Apply for Franchise
+                        </button></Link>
+                        <Link to='/courselist'><button className="intern-btn-hover px-8 py-4 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold rounded-full transition-all duration-300">
+                            View Course Programs
+                        </button></Link>
                     </div>
                 </div>
             </div>
@@ -542,9 +938,7 @@ export default function Carrer() {
                         Join a company that believes in your growth and provides the tools to succeed
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-                        <button className="growth-btn-hover px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-500 hover:to-blue-600 text-white font-bold rounded-full transition-all duration-300 shadow-lg">
-                            Explore Career Paths
-                        </button>
+                        
                         <Link to='/academy'><button className="growth-btn-hover px-8 py-4 border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-semibold rounded-full transition-all duration-300">
                             View Training Programs
                         </button></Link>
@@ -640,9 +1034,9 @@ export default function Carrer() {
                         </div>
                         
                         <div className="mt-5">
-                            <a href="mailto:careers@softpro9.com" className="btn-primary-custom">
-                                <i className="fas fa-paper-plane me-2"></i>Submit Your Resume
-                            </a>
+                            <button  className="btn-primary-custom" onClick={e => { e.preventDefault(); setShowResumeModal(true); }}>
+                             <i className="fas fa-paper-plane me-2"></i>Submit Your Resume
+                           </button>
                         </div>
                     </div>
                 </div>
@@ -650,59 +1044,326 @@ export default function Carrer() {
         </div>
     </section>
 
-    {/* Application Modal  */}
-    <div className="modal fade" id="applicationModal" tabindex="-1" aria-labelledby="applicationModalLabel" aria-hidden="true">
-        <div className="modal-dialog modal-lg">
-            <div className="modal-content">
-                <div className="modal-header">
-                    <h5 className="modal-title" id="applicationModalLabel">Apply for Position</h5>
-                    <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div className="modal-body">
-                    <form id="applicationForm">
-                        <div className="mb-3">
-                            <label htmlFor="applicantName" className="form-label">Full Name *</label>
-                            <input type="text" className="form-control" id="applicantName" required/>
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="applicantEmail" className="form-label">Email Address *</label>
-                            <input type="email" className="form-control" id="applicantEmail" required/>
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="applicantPhone" className="form-label">Phone Number *</label>
-                            <input type="tel" className="form-control" id="applicantPhone" required/>
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="applicantPosition" className="form-label">Position Applied For</label>
-                            <input type="text" className="form-control" id="applicantPosition" readonly/>
-                        </div>
-                        <div className="mb-3">
-                            <label for="applicantExperience" className="form-label">Years of Experience</label>
-                            <select class="form-control" id="applicantExperience">
-                                <option>0-1 years</option>
-                                <option>2-3 years</option>
-                                <option>4-5 years</option>
-                                <option>6-8 years</option>
-                                <option>9+ years</option>
-                            </select>
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="applicantResume" className="form-label">Resume/CV *</label>
-                            <input type="file" class="form-control" id="applicantResume" accept=".pdf,.doc,.docx" required/>
-                        </div>
-                        <div className="mb-3">
-                            <label htmlFor="applicantCoverLetter" className="form-label">Why do you want to join SoftPro9?</label>
-                            <textarea className="form-control" id="applicantCoverLetter" rows="4" placeholder="Tell us about your motivation and what you can bring to our team..."></textarea>
-                        </div>
-                    </form>
-                </div>
-                <div className="modal-footer">
-                    <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="button" className="btn btn-primary" onClick="submitApplication()">Submit Application</button>
-                </div>
-            </div>
+   {/* Modal */}
+{showResumeModal && (
+  <div 
+    className="modal" 
+    style={{
+      position:"fixed",
+      top:0,
+      left:0,
+      right:0,
+      bottom:0,
+      backgroundColor:"rgba(0,0,0,0.6)",
+      display:"flex",
+      justifyContent:"center",
+      alignItems:"center",
+      zIndex:1000,
+      padding: "20px"
+    }} 
+    onClick={() => setShowResumeModal(false)}
+  >
+    <div 
+      className="modal-content bg-white rounded-2xl w-full max-w-5xl max-h-[90vh] overflow-hidden shadow-2xl flex flex-col md:flex-row" 
+      onClick={e => e.stopPropagation()}
+    >
+      {/* Left Side - Blue Section */}
+      <div className="bg-gradient-to-br from-blue-600 to-blue-700 text-white p-8 md:p-10 md:w-2/5 flex flex-col justify-center relative">
+        <div className="mb-6">
+          <div className="text-5xl mb-4">🎓</div>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
+            Apply for Your Dream Job
+          </h2>
+          <p className="text-blue-100 text-base mb-8">
+            Submit your details and let us help you find the perfect opportunity
+          </p>
         </div>
+
+        <div className="space-y-4">
+          <div className="flex items-start gap-3">
+            <div className="text-2xl">✓</div>
+            <div>
+              <h4 className="font-semibold text-lg">Quick Application</h4>
+              <p className="text-blue-100 text-sm">Simple and fast process</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <div className="text-2xl">✓</div>
+            <div>
+              <h4 className="font-semibold text-lg">Expert Guidance</h4>
+              <p className="text-blue-100 text-sm">Career counseling support</p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <div className="text-2xl">✓</div>
+            <div>
+              <h4 className="font-semibold text-lg">Top Opportunities</h4>
+              <p className="text-blue-100 text-sm">Access to best companies</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Decorative elements */}
+        <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-blue-800/30 to-transparent"></div>
+      </div>
+
+      {/* Right Side - Form Section */}
+      <div className="bg-white p-6 md:p-8 md:w-3/5 overflow-y-auto">
+        <div className="flex justify-between items-center mb-6">
+          <h3 className="text-2xl font-bold text-gray-800">Submit Your Application</h3>
+          <button
+            type="button"
+            className="text-gray-400 hover:text-red-500 text-3xl font-bold leading-none transition-colors"
+            onClick={() => setShowResumeModal(false)}
+            aria-label="Close"
+          >
+            ×
+          </button>
+        </div>
+
+        <p className="text-gray-600 text-sm mb-6">
+          Fill in your details and pick your preferred position
+        </p>
+
+        <form onSubmit={handleSubmit} encType="multipart/form-data" className="space-y-4">
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Your Full Name *</label>
+            <input
+              type="text"
+              name="name"
+              value={form.name}
+              onChange={handleInputChange}
+              required
+              placeholder="Enter your full name"
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Email Address *</label>
+            <input
+              type="email"
+              name="email"
+              value={form.email}
+              onChange={handleInputChange}
+              required
+              placeholder="your.email@example.com"
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Phone Number</label>
+            <input
+              type="text"
+              name="phone"
+              value={form.phone}
+              onChange={handleInputChange}
+              placeholder="Enter your phone number"
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
+            />
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Location *</label>
+            <select
+              name="location"
+              value={form.location || ''}
+              onChange={handleInputChange}
+              required
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800 bg-white"
+            >
+              <option value="">Select your location</option>
+              <option value="Delhi">Delhi</option>
+              <option value="Mumbai">Mumbai</option>
+              <option value="Bangalore">Bangalore</option>
+              <option value="Hyderabad">Hyderabad</option>
+              <option value="Chennai">Chennai</option>
+            </select>
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Applied For *</label>
+            <select
+              name="position"
+              value={form.position}
+              onChange={handleInputChange}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800 bg-white"
+              required
+            >
+              <option value="">Choose a position...</option>
+              {jobs.map(job => (
+                <option value={job.title} key={job.id}>{job.title}</option>
+              ))}
+            </select>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block mb-2 font-medium text-gray-700 text-sm">Experience (Years)</label>
+              <input
+                type="number"
+                min="0"
+                step="0.1"
+                name="experience"
+                value={form.experience}
+                onChange={handleInputChange}
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
+                placeholder="0"
+              />
+            </div>
+            <div className="flex items-end">
+              <label className="flex items-center gap-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  name="fresher"
+                  checked={form.fresher}
+                  onChange={handleInputChange}
+                  className="h-5 w-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                />
+                <span className="font-medium text-gray-700">I am a Fresher</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Cover Letter (Optional)</label>
+            <textarea
+              name="cover_letter"
+              value={form.cover_letter}
+              onChange={handleInputChange}
+              rows={3}
+              placeholder="Tell us why you're a great fit for this role..."
+              className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800 resize-none"
+            />
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label className="block mb-2 font-medium text-gray-700 text-sm">Current CTC</label>
+              <input
+                type="text"
+                name="current_ctc_amount"
+                value={formatNumberWithCommas(form.current_ctc_amount)}
+                onChange={e => {
+                  const rawValue = e.target.value.replace(/[^\d]/g, '');
+                  handleInputChange({
+                    target: {
+                      name: 'current_ctc_amount',
+                      value: rawValue,
+                    }
+                  });
+                }}
+                placeholder="Amount"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
+                inputMode="numeric"
+                autoComplete="off"
+              />
+              <div className="flex gap-2 mt-2">
+                <select 
+                  name="current_ctc_currency" 
+                  value={form.current_ctc_currency} 
+                  onChange={handleInputChange}
+                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                >
+                  <option>INR</option>
+                  <option>USD</option>
+                  <option>AED</option>
+                  <option>SGD</option>
+                  <option>UAE</option>
+                </select>
+                <select 
+                  name="current_ctc_period" 
+                  value={form.current_ctc_period} 
+                  onChange={handleInputChange}
+                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                >
+                  <option>Per Annum</option>
+                  <option>Per Month</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label className="block mb-2 font-medium text-gray-700 text-sm">Expected CTC</label>
+              <input
+                type="text"
+                name="expected_ctc_amount"
+                value={formatNumberWithCommas(form.expected_ctc_amount)}
+                onChange={e => {
+                  const rawValue = e.target.value.replace(/[^\d]/g, '');
+                  handleInputChange({
+                    target: {
+                      name: 'expected_ctc_amount',
+                      value: rawValue,
+                    }
+                  });
+                }}
+                placeholder="Amount"
+                className="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all text-gray-800"
+                inputMode="numeric"
+                autoComplete="off"
+              />
+              <div className="flex gap-2 mt-2">
+                <select 
+                  name="expected_ctc_currency" 
+                  value={form.expected_ctc_currency} 
+                  onChange={handleInputChange}
+                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                >
+                  <option>INR</option>
+                  <option>USD</option>
+                  <option>AED</option>
+                  <option>SGD</option>
+                  <option>UAE</option>
+                </select>
+                <select 
+                  name="expected_ctc_period" 
+                  value={form.expected_ctc_period} 
+                  onChange={handleInputChange}
+                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none bg-white"
+                >
+                  <option>Per Annum</option>
+                  <option>Per Month</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label className="block mb-2 font-medium text-gray-700 text-sm">Upload Resume *</label>
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 hover:border-blue-500 transition-colors">
+              <input
+                type="file"
+                name="resume"
+                accept=".pdf,.doc,.docx"
+                onChange={handleInputChange}
+                required
+                className="w-full text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 cursor-pointer"
+              />
+              <p className="text-xs text-gray-500 mt-2">PDF, DOC, or DOCX (Max 5MB)</p>
+            </div>
+          </div>
+
+          <div className="flex gap-3 mt-6 pt-4">
+            <button
+              type="submit"
+              className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 rounded-lg transition-all shadow-md hover:shadow-lg transform hover:scale-[1.02]"
+            >
+              Submit Application
+            </button>
+            <button
+              type="button"
+              onClick={() => setShowResumeModal(false)}
+              className="px-6 bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-3 rounded-lg transition-all"
+            >
+              Cancel
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
+  </div>
+)}
 
     </>
   )

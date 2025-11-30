@@ -1,13 +1,24 @@
 import React from 'react'
 import './style.css';
+import { Helmet } from 'react-helmet-async';
+import ScrollArrowButton from './ScrollArrowButton';
+import ConsultationFormModal from "./ConsultationFormModal";
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+
 
 export default function Sapservice() {
-      // CTA button click handler
-  const handleCTA = () => {
-    alert(
-      "Get Free SAP Consultation"
+    const [mobileOpen, setMobileOpen] = useState(false);
+    const [showConsultationModal, setShowConsultationModal] = useState(false);
+    const [showModal, setShowModal] = useState(false);
+    const [modalFormType, setModalFormType] = useState('consultation'); // or 'quote'
+    const CheckIcon = () => (
+        <svg className="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd"></path>
+        </svg>
     );
-  };
+
+   
  const handleschedule = () => {
     alert(
       "Schedule a Consultation"
@@ -17,6 +28,12 @@ export default function Sapservice() {
 
   return (
     <>
+              <ScrollArrowButton />
+
+    <Helmet>
+                    <title>SAP Services - Softpro9</title>
+                    <meta name="description" content="SAP consulting services" />
+    </Helmet>
     <div className='bg-white text-gray-800'>
      {/* Hero Section  */}
     <section className="serviceSAP-hero-gradient text-white py-20">
@@ -47,11 +64,22 @@ export default function Sapservice() {
                 </div>
             </div>
             
-            <button className="serviceSAP-cta-button bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-bold hover:bg-blue-50 transition duration-300 serviceSAP-pulse" onClick={handleCTA}>
-                Get a Free SAP Consultation
+            <button
+            onClick={() => {
+                    setModalFormType('consultation');
+                    setShowModal(true);
+                    }} 
+            className="serviceweb-cta-btn bg-white text-blue-600 px-8 py-4 rounded-full text-lg font-semibold hover:bg-blue-50 transition duration-300 shadow-lg" >
+                Get a Free Consultation
             </button>
         </div>
     </section>
+    {/* consultation modal */}
+            <ConsultationFormModal
+                isOpen={showModal}
+                onClose={() => setShowModal(false)}
+                formType={modalFormType}
+                />
 
      {/* SAP Implementation Section  */}
     <section className="serviceSAP-implementation-section py-16 serviceSAP-section-bg-1">
@@ -485,103 +513,381 @@ export default function Sapservice() {
     </section>
 
      {/* Specialized SAP Services  */}
-    <section className="serviceSAP-specialized-section py-16 serviceSAP-section-bg-2">
-        <div className="container mx-auto px-6">
-            <div className="serviceSAP-section-header text-center mb-12">
-                <h2 className="serviceSAP-section-title text-4xl font-bold text-blue-800 mb-4">Specialized SAP Services</h2>
-                <p className="serviceSAP-section-desc text-gray-600 max-w-2xl mx-auto">Advanced SAP services to enhance security, performance, and automation capabilities.</p>
-            </div>
-            
-            <div className="serviceSAP-specialized-content grid grid-cols-1 lg:grid-cols-2 gap-12">
-                <div className="serviceSAP-specialized-left">
-                    <div className="serviceSAP-specialized-cards space-y-6">
-                        <div className="serviceSAP-specialized-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500">
-                            <div className="serviceSAP-specialized-header flex items-center mb-4">
-                                <div className="serviceSAP-specialized-icon bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
-                                    <span className="text-blue-600 text-xl">💻</span>
-                                </div>
-                                <h3 className="serviceSAP-specialized-title text-xl font-bold text-blue-800">Custom Development</h3>
-                            </div>
-                            <p className="serviceSAP-specialized-desc text-gray-600 mb-3">ABAP, UI5, and Fiori development services</p>
-                            <div className="serviceSAP-specialized-tags flex flex-wrap gap-2">
-                                <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">ABAP</span>
-                                <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">UI5</span>
-                                <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">Fiori</span>
-                            </div>
-                        </div>
-                        
-                        <div className="serviceSAP-specialized-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500">
-                            <div className="serviceSAP-specialized-header flex items-center mb-4">
-                                <div className="serviceSAP-specialized-icon bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
-                                    <span className="text-purple-600 text-xl">🔐</span>
-                                </div>
-                                <h3 className="serviceSAP-specialized-title text-xl font-bold text-purple-800">SAP GRC</h3>
-                            </div>
-                            <p className="serviceSAP-specialized-desc text-gray-600 mb-3">Governance, Risk & Compliance solutions</p>
-                            <div className="serviceSAP-specialized-tags flex flex-wrap gap-2">
-                                <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm">Access Control</span>
-                                <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm">Risk Management</span>
-                            </div>
-                        </div>
-                        
-                        <div className="serviceSAP-specialized-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500">
-                            <div className="serviceSAP-specialized-header flex items-center mb-4">
-                                <div className="serviceSAP-specialized-icon bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
-                                    <span className="text-green-600 text-xl">🚀</span>
-                                </div>
-                                <h3 className="serviceSAP-specialized-title text-xl font-bold text-green-800">Performance Optimization</h3>
-                            </div>
-                            <p className="serviceSAP-specialized-desc text-gray-600 mb-3">System tuning and performance enhancement</p>
-                            <div className="serviceSAP-specialized-tags flex flex-wrap gap-2">
-                                <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm">System Tuning</span>
-                                <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm">Code Optimization</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div className="serviceSAP-specialized-right">
-                    <div className="serviceSAP-specialized-cards space-y-6">
-                        <div className="serviceSAP-specialized-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500">
-                            <div className="serviceSAP-specialized-header flex items-center mb-4">
-                                <div className="serviceSAP-specialized-icon bg-orange-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
-                                    <span className="text-orange-600 text-xl">🧪</span>
-                                </div>
-                                <h3 className="serviceSAP-specialized-title text-xl font-bold text-orange-800">SAP Testing Services</h3>
-                            </div>
-                            <p className="serviceSAP-specialized-desc text-gray-600 mb-3">Comprehensive testing and quality assurance</p>
-                            <div className="serviceSAP-specialized-tags flex flex-wrap gap-2">
-                                <span className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm">Automated Testing</span>
-                                <span className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm">UAT Support</span>
-                            </div>
-                        </div>
-                        
-                        <div className="serviceSAP-specialized-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500">
-                            <div className="serviceSAP-specialized-header flex items-center mb-4">
-                                <div className="serviceSAP-specialized-icon bg-red-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
-                                    <span className="text-red-600 text-xl">🤖</span>
-                                </div>
-                                <h3 className="serviceSAP-specialized-title text-xl font-bold text-red-800">SAP RPA</h3>
-                            </div>
-                            <p className="serviceSAP-specialized-desc text-gray-600 mb-3">Robotic Process Automation solutions</p>
-                            <div className="serviceSAP-specialized-tags flex flex-wrap gap-2">
-                                <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm">Process Automation</span>
-                                <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm">Bot Development</span>
-                            </div>
-                        </div>
-                        
-                          {/* Feature Highlight Box  */}
-                        <div className="serviceSAP-highlight-box bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-6">
-                            <h3 className="serviceSAP-highlight-title text-xl font-bold mb-3">Ready to Transform Your Business?</h3>
-                            <p className="serviceSAP-highlight-text mb-4">Let our SAP experts help you unlock the full potential of your enterprise systems.</p>
-                            <button className="serviceSAP-highlight-cta bg-white text-blue-600 px-6 py-3 rounded-lg font-bold hover:bg-gray-100 transition duration-300" onClick={handleschedule}>
-                                Schedule a Consultation
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+    <section className="serviceSAP-specialized-section py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+  <div className="container mx-auto px-6">
+    <div className="serviceSAP-section-header text-center mb-12">
+      <h2 className="serviceSAP-section-title text-4xl font-bold text-blue-800 mb-4">
+        Specialized SAP Services
+      </h2>
+      <p className="serviceSAP-section-desc text-gray-600 max-w-2xl mx-auto">
+        Advanced SAP services to enhance security, performance, and automation capabilities.
+      </p>
+    </div>
+    
+    <div className="serviceSAP-specialized-content grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Card 1 - Custom Development */}
+      <div className="serviceSAP-specialized-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-blue-500 hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full">
+        <div className="serviceSAP-specialized-header flex items-center mb-4">
+          <div className="serviceSAP-specialized-icon bg-blue-100 w-12 h-12 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+            <span className="text-blue-600 text-xl">💻</span>
+          </div>
+          <h3 className="serviceSAP-specialized-title text-xl font-bold text-blue-800">
+            Custom Development
+          </h3>
         </div>
+        <p className="serviceSAP-specialized-desc text-gray-600 mb-4 flex-grow">
+          ABAP, UI5, and Fiori development services
+        </p>
+        <div className="serviceSAP-specialized-tags flex flex-wrap gap-2">
+          <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">ABAP</span>
+          <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">UI5</span>
+          <span className="bg-blue-100 text-blue-600 px-3 py-1 rounded-full text-sm">Fiori</span>
+        </div>
+      </div>
+      
+      {/* Card 2 - SAP GRC */}
+      <div className="serviceSAP-specialized-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-purple-500 hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full">
+        <div className="serviceSAP-specialized-header flex items-center mb-4">
+          <div className="serviceSAP-specialized-icon bg-purple-100 w-12 h-12 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+            <span className="text-purple-600 text-xl">🔐</span>
+          </div>
+          <h3 className="serviceSAP-specialized-title text-xl font-bold text-purple-800">
+            SAP GRC
+          </h3>
+        </div>
+        <p className="serviceSAP-specialized-desc text-gray-600 mb-4 flex-grow">
+          Governance, Risk & Compliance solutions
+        </p>
+        <div className="serviceSAP-specialized-tags flex flex-wrap gap-2">
+          <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm">Access Control</span>
+          <span className="bg-purple-100 text-purple-600 px-3 py-1 rounded-full text-sm">Risk Management</span>
+        </div>
+      </div>
+      
+      {/* Card 3 - Performance Optimization */}
+      <div className="serviceSAP-specialized-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-green-500 hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full">
+        <div className="serviceSAP-specialized-header flex items-center mb-4">
+          <div className="serviceSAP-specialized-icon bg-green-100 w-12 h-12 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+            <span className="text-green-600 text-xl">🚀</span>
+          </div>
+          <h3 className="serviceSAP-specialized-title text-xl font-bold text-green-800">
+            Performance Optimization
+          </h3>
+        </div>
+        <p className="serviceSAP-specialized-desc text-gray-600 mb-4 flex-grow">
+          System tuning and performance enhancement
+        </p>
+        <div className="serviceSAP-specialized-tags flex flex-wrap gap-2">
+          <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm">System Tuning</span>
+          <span className="bg-green-100 text-green-600 px-3 py-1 rounded-full text-sm">Code Optimization</span>
+        </div>
+      </div>
+      
+      {/* Card 4 - SAP Testing Services */}
+      <div className="serviceSAP-specialized-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-orange-500 hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full">
+        <div className="serviceSAP-specialized-header flex items-center mb-4">
+          <div className="serviceSAP-specialized-icon bg-orange-100 w-12 h-12 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+            <span className="text-orange-600 text-xl">🧪</span>
+          </div>
+          <h3 className="serviceSAP-specialized-title text-xl font-bold text-orange-800">
+            SAP Testing Services
+          </h3>
+        </div>
+        <p className="serviceSAP-specialized-desc text-gray-600 mb-4 flex-grow">
+          Comprehensive testing and quality assurance
+        </p>
+        <div className="serviceSAP-specialized-tags flex flex-wrap gap-2">
+          <span className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm">Automated Testing</span>
+          <span className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-sm">UAT Support</span>
+        </div>
+      </div>
+      
+      {/* Card 5 - SAP RPA */}
+      <div className="serviceSAP-specialized-card bg-white rounded-xl shadow-lg p-6 border-l-4 border-red-500 hover:shadow-2xl transition-shadow duration-300 flex flex-col h-full">
+        <div className="serviceSAP-specialized-header flex items-center mb-4">
+          <div className="serviceSAP-specialized-icon bg-red-100 w-12 h-12 rounded-full flex items-center justify-center mr-4 flex-shrink-0">
+            <span className="text-red-600 text-xl">🤖</span>
+          </div>
+          <h3 className="serviceSAP-specialized-title text-xl font-bold text-red-800">
+            SAP RPA
+          </h3>
+        </div>
+        <p className="serviceSAP-specialized-desc text-gray-600 mb-4 flex-grow">
+          Robotic Process Automation solutions
+        </p>
+        <div className="serviceSAP-specialized-tags flex flex-wrap gap-2">
+          <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm">Process Automation</span>
+          <span className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm">Bot Development</span>
+        </div>
+      </div>
+      
+      {/* Feature Highlight Box */}
+      <div className="serviceSAP-highlight-box bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-6 hover:shadow-2xl transition-shadow duration-300 flex flex-col justify-center h-full">
+        <h3 className="serviceSAP-highlight-title text-2xl font-bold mb-3">
+          Ready to Transform Your Business?
+        </h3>
+        <p className="serviceSAP-highlight-text mb-6">
+          Let our SAP experts help you unlock the full potential of your enterprise systems.
+        </p>
+        <Link to='/courselist'><button className="bg-white text-blue-600 font-semibold py-3 px-6 rounded-lg hover:bg-gray-100 transition-colors duration-300 self-start">
+          Get Started →
+        </button></Link>
+      </div>
+    </div>
+  </div>
+</section>
+
+    {/* Pricing Section */}
+    <section className="py-20 bg-gradient-to-br from-indigo-50 to-purple-100">
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                {/* Section Header */}
+                <div className="text-center mb-16">
+                    <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                        SAP Solutions & Services
+                    </h2>
+                    <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                        Complete SAP implementation, migration, training, and support services. Transform your business operations with enterprise-grade SAP solutions.
+                    </p>
+                </div>
+
+                {/* Pricing Cards Container */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 justify-center">
+                    
+                    {/* SAP Training & Consulting */}
+                    <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200 hover:shadow-xl hover:scale-105 hover:border-gray-300 transition-all duration-300 cursor-pointer group">
+                        <div className="text-center mb-6">
+                            <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <span className="text-2xl">🎓</span>
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">SAP Training & Consulting</h3>
+                            <p className="text-gray-600 leading-relaxed">Professional SAP training programs and expert consulting services.</p>
+                        </div>
+                        
+                        {/* Features List */}
+                        <div className="space-y-4 mb-8">
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">SAP FICO Training (40+ Hours)</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">SAP MM/SD Module Training</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">SAP S/4HANA Overview</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Hands-on Practice Sessions</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Real-world Case Studies</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Certification Preparation</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Job Placement Assistance</span>
+                            </div>
+                        </div>
+                        
+                        {/* Price */}
+                        <div className="text-center mb-8">
+                            <span className="text-4xl font-bold text-gray-900">₹45,000</span>
+                            <span className="text-gray-600"> - ₹85,000</span>
+                        </div>
+                        
+                        {/* CTA Button */}
+                        <button className="w-full bg-blue-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-blue-700 hover:scale-105 transform transition-all duration-300 shadow-md hover:shadow-lg">
+                            Enroll Now
+                        </button>
+                    </div>
+                    
+                    {/* SAP Implementation (Most Popular) */}
+                    <div className="bg-white rounded-2xl shadow-xl p-8 border-2 border-purple-500 relative transform scale-105 hover:shadow-2xl hover:scale-110 transition-all duration-300 cursor-pointer group">
+                        {/* Most Popular Badge */}
+                        <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                            <span className="bg-gradient-to-r from-purple-500 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-semibold shadow-lg">
+                                Most Popular
+                            </span>
+                        </div>
+                        
+                        <div className="text-center mb-6 mt-4">
+                            <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <span className="text-2xl">🏗️</span>
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">SAP Implementation</h3>
+                            <p className="text-gray-600 leading-relaxed">Complete SAP system implementation with custom configuration and integration.</p>
+                        </div>
+                        
+                        {/* Features List */}
+                        <div className="space-y-4 mb-8">
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">SAP S/4HANA Implementation</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Business Process Analysis & Design</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Custom Module Configuration</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Data Migration & Integration</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">User Training & Documentation</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Go-Live Support & Testing</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Post-Implementation Support (6 months)</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Performance Optimization</span>
+                            </div>
+                        </div>
+                        
+                        {/* Price */}
+                        <div className="text-center mb-8">
+                            <span className="text-4xl font-bold text-purple-600">₹15,00,000</span>
+                            <span className="text-gray-600"> - ₹50,00,000</span>
+                        </div>
+                        
+                        {/* CTA Button */}
+                        <button className="w-full bg-gradient-to-r from-purple-500 to-purple-600 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-600 hover:to-purple-700 hover:scale-105 transform transition-all duration-300 shadow-md hover:shadow-lg">
+                            Get Implementation Quote
+                        </button>
+                    </div>
+                    
+                    {/* SAP Migration & Support */}
+                    <div className="bg-white rounded-2xl shadow-lg p-8 border border-gray-200 hover:shadow-xl hover:scale-105 hover:border-gray-300 transition-all duration-300 cursor-pointer group">
+                        <div className="text-center mb-6">
+                            <div className="w-16 h-16 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300">
+                                <span className="text-2xl">🔄</span>
+                            </div>
+                            <h3 className="text-2xl font-bold text-gray-900 mb-2">SAP Migration & Support</h3>
+                            <p className="text-gray-600 leading-relaxed">Seamless SAP system migration and ongoing technical support services.</p>
+                        </div>
+                        
+                        {/* Features List */}
+                        <div className="space-y-4 mb-8">
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">SAP ECC to S/4HANA Migration</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">System Assessment & Planning</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Data Cleanup & Validation</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Cloud Migration Services</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">24/7 Technical Support</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">System Monitoring & Maintenance</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Regular Updates & Patches</span>
+                            </div>
+                            <div className="flex items-start space-x-3">
+                                <CheckIcon />
+                                <span className="text-gray-700">Emergency Issue Resolution</span>
+                            </div>
+                        </div>
+                        
+                        {/* Price */}
+                        <div className="text-center mb-8">
+                            <span className="text-4xl font-bold text-gray-900">₹8,00,000</span>
+                            <span className="text-gray-600"> - ₹25,00,000</span>
+                        </div>
+                        
+                        {/* CTA Button */}
+                        <button className="w-full bg-orange-600 text-white py-3 px-6 rounded-xl font-semibold hover:bg-orange-700 hover:scale-105 transform transition-all duration-300 shadow-md hover:shadow-lg">
+                            Plan Migration
+                        </button>
+                    </div>
+                </div>
+
+                {/* SAP Modules Section */}
+                <div className="mt-16 bg-white rounded-2xl p-8 shadow-lg">
+                    <h3 className="text-2xl font-bold text-gray-900 text-center mb-8">
+                        SAP Modules We Specialize In
+                    </h3>
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div className="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                            <span className="text-3xl mb-2 block">💰</span>
+                            <h4 className="font-semibold text-gray-900 mb-2">SAP FICO</h4>
+                            <p className="text-sm text-gray-600">Financial Accounting & Controlling</p>
+                        </div>
+                        <div className="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                            <span className="text-3xl mb-2 block">📦</span>
+                            <h4 className="font-semibold text-gray-900 mb-2">SAP MM</h4>
+                            <p className="text-sm text-gray-600">Materials Management</p>
+                        </div>
+                        <div className="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                            <span className="text-3xl mb-2 block">🛍️</span>
+                            <h4 className="font-semibold text-gray-900 mb-2">SAP SD</h4>
+                            <p className="text-sm text-gray-600">Sales & Distribution</p>
+                        </div>
+                        <div className="text-center p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-colors">
+                            <span className="text-3xl mb-2 block">👥</span>
+                            <h4 className="font-semibold text-gray-900 mb-2">SAP HR</h4>
+                            <p className="text-sm text-gray-600">Human Resources</p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Certifications Section */}
+                <div className="mt-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-white text-center">
+                    <h3 className="text-2xl font-bold mb-4">Our SAP Certifications & Expertise</h3>
+                    <p className="text-blue-100 mb-6">
+                        Our team holds official SAP certifications and has 10+ years of enterprise implementation experience
+                    </p>
+                    <div className="flex justify-center items-center space-x-8 flex-wrap gap-4">
+                        <div className="flex items-center space-x-2">
+                            <span className="text-2xl">🏆</span>
+                            <span className="font-semibold">SAP Certified</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <span className="text-2xl">✅</span>
+                            <span className="font-semibold">100+ Implementations</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <span className="text-2xl">⚡</span>
+                            <span className="font-semibold">S/4HANA Experts</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <span className="text-2xl">🌟</span>
+                            <span className="font-semibold">99% Success Rate</span>
+                        </div>
+                    </div>
+                </div>
+
+                
+            </div>
     </section>
 
      {/* Final CTA Section  */}
@@ -607,12 +913,15 @@ export default function Sapservice() {
                 </div>
                 
                 <div className="serviceSAP-cta-buttons flex flex-col sm:flex-row gap-4 justify-center">
-                    <button className="serviceSAP-primary-cta bg-white text-blue-800 px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition duration-300 serviceSAP-pulse" onClick={handleCTA}>
-                        Get Free SAP Consultation
+                    <button 
+                    onClick={() => {
+                    setModalFormType('quote');
+                    setShowModal(true);
+                    }}
+                    className="serviceSAP-secondary-cta bg-white text-blue-800 px-8 py-4 rounded-full text-lg font-bold hover:bg-gray-100 transition duration-300">
+                        Get A Quote
                     </button>
-                    <button className="serviceSAP-secondary-cta border-2 border-white text-white px-8 py-4 rounded-full text-lg font-bold hover:bg-white hover:text-blue-800 transition duration-300">
-                        View Case Studies
-                    </button>
+                    
                 </div>
             </div>
         </div>
