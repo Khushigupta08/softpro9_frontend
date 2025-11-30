@@ -13,12 +13,13 @@
     "@testing-library/user-event": "^13.5.0",
     "aos": "^2.3.4",
     "axios": "^1.12.2",
-    "framer-motion": "^12.23.12",
+    "framer-motion": "^7.6.12",
     "html-react-parser": "^5.2.6",
     "jspdf": "^3.0.3",
     "lucide-react": "^0.539.0",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "ajv": "6.12.6",
     "react-dropzone": "^14.3.8",
     "react-google-recaptcha": "^3.1.0",
     "react-helmet-async": "^2.0.5",
@@ -38,6 +39,12 @@
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
+  },
+  "overrides": {
+    "ajv": "6.12.6"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "eslintConfig": {
     "extends": [
