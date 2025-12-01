@@ -1,30 +1,29 @@
 {
-  "buildCommand": "npm ci --legacy-peer-deps && npm run build",
-  "outputDirectory": "build",
-  "installCommand": "npm ci --legacy-peer-deps",
+  "version": 2,
   "framework": "create-react-app",
+  "buildCommand": "npm install --legacy-peer-deps && npm run build",
+  "outputDirectory": "build",
   "env": {
     "NODE_ENV": "production"
   },
-  "routes": [
+  "headers": [
     {
-      "src": "^/static/(.*)$",
-      "dest": "/static/$1",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
+      "source": "/static/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
     },
     {
-      "src": "^/.*\\.(?:js|css|jpg|jpeg|png|gif|ico|svg|webp|woff|woff2|json)$",
-      "dest": "/$0",
-      "headers": {
-        "cache-control": "public, max-age=31536000, immutable"
-      }
-    },
+      "source": "/(.*)\\.(js|css|jpg|jpeg|png|gif|ico|svg|webp|woff|woff2|json|webmanifest)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    }
+  ],
+  "rewrites": [
     {
-      "src": "^/(.*)$",
-      "dest": "/index.html",
-      "status": 200
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
